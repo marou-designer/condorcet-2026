@@ -1,0 +1,636 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Classe vs Instance en C# .NET</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+        
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            padding: 20px;
+            min-height: 100vh;
+        }
+        
+        .container {
+            max-width: 1400px;
+            margin: 0 auto;
+            background: white;
+            border-radius: 20px;
+            padding: 40px;
+            box-shadow: 0 20px 60px rgba(0,0,0,0.3);
+        }
+        
+        h1 {
+            color: #667eea;
+            text-align: center;
+            margin-bottom: 10px;
+            font-size: 2.5em;
+        }
+        
+        .subtitle {
+            text-align: center;
+            color: #666;
+            margin-bottom: 40px;
+            font-size: 1.1em;
+        }
+        
+        .section {
+            margin-bottom: 40px;
+        }
+        
+        h2 {
+            color: #764ba2;
+            margin-bottom: 20px;
+            padding-bottom: 10px;
+            border-bottom: 3px solid #667eea;
+        }
+        
+        .comparison-visual {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 30px;
+            margin: 40px 0;
+        }
+        
+        .visual-box {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            border-radius: 20px;
+            padding: 30px;
+            color: white;
+            box-shadow: 0 10px 30px rgba(0,0,0,0.2);
+        }
+        
+        .visual-box h3 {
+            font-size: 2em;
+            margin-bottom: 20px;
+            text-align: center;
+        }
+        
+        .blueprint {
+            background: rgba(255,255,255,0.2);
+            border: 3px dashed white;
+            border-radius: 15px;
+            padding: 20px;
+            margin: 20px 0;
+            text-align: center;
+        }
+        
+        .blueprint-icon {
+            font-size: 4em;
+            margin-bottom: 10px;
+        }
+        
+        .instances-container {
+            display: flex;
+            flex-direction: column;
+            gap: 15px;
+        }
+        
+        .instance {
+            background: rgba(255,255,255,0.9);
+            color: #333;
+            border-radius: 10px;
+            padding: 15px;
+            box-shadow: 0 5px 15px rgba(0,0,0,0.2);
+        }
+        
+        .instance h4 {
+            color: #667eea;
+            margin-bottom: 10px;
+        }
+        
+        .code-block {
+            background: #282c34;
+            color: #abb2bf;
+            padding: 20px;
+            border-radius: 10px;
+            overflow-x: auto;
+            margin: 20px 0;
+            font-family: 'Courier New', monospace;
+            font-size: 0.95em;
+            line-height: 1.6;
+        }
+        
+        .keyword {
+            color: #c678dd;
+        }
+        
+        .class-name {
+            color: #e5c07b;
+        }
+        
+        .method {
+            color: #61afef;
+        }
+        
+        .string {
+            color: #98c379;
+        }
+        
+        .comment {
+            color: #5c6370;
+            font-style: italic;
+        }
+        
+        .number {
+            color: #d19a66;
+        }
+        
+        .analogy-section {
+            background: linear-gradient(135deg, #f093fb 0%, #f5576c 100%);
+            color: white;
+            padding: 40px;
+            border-radius: 20px;
+            margin: 40px 0;
+            box-shadow: 0 10px 30px rgba(0,0,0,0.2);
+        }
+        
+        .analogy-section h3 {
+            font-size: 2em;
+            margin-bottom: 20px;
+            text-align: center;
+        }
+        
+        .analogy-grid {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 30px;
+            margin-top: 30px;
+        }
+        
+        .analogy-card {
+            background: rgba(255,255,255,0.2);
+            padding: 25px;
+            border-radius: 15px;
+            text-align: center;
+        }
+        
+        .analogy-icon {
+            font-size: 5em;
+            margin-bottom: 15px;
+        }
+        
+        .analogy-card h4 {
+            font-size: 1.5em;
+            margin-bottom: 10px;
+        }
+        
+        .interactive-section {
+            background: #f8f9fa;
+            padding: 30px;
+            border-radius: 15px;
+            margin: 30px 0;
+        }
+        
+        .factory-demo {
+            display: flex;
+            gap: 30px;
+            margin: 30px 0;
+            flex-wrap: wrap;
+        }
+        
+        .factory {
+            flex: 1;
+            min-width: 250px;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: white;
+            padding: 25px;
+            border-radius: 15px;
+            text-align: center;
+        }
+        
+        .factory h4 {
+            font-size: 1.5em;
+            margin-bottom: 20px;
+        }
+        
+        .products {
+            flex: 2;
+            min-width: 300px;
+        }
+        
+        .product-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(200px, 1fr));
+            gap: 15px;
+            margin-top: 20px;
+        }
+        
+        .product-card {
+            background: white;
+            padding: 20px;
+            border-radius: 10px;
+            box-shadow: 0 5px 15px rgba(0,0,0,0.1);
+            transition: all 0.3s ease;
+        }
+        
+        .product-card:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 10px 25px rgba(0,0,0,0.2);
+        }
+        
+        .product-card h5 {
+            color: #667eea;
+            margin-bottom: 10px;
+        }
+        
+        button {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: white;
+            border: none;
+            padding: 15px 30px;
+            border-radius: 10px;
+            cursor: pointer;
+            font-size: 1em;
+            transition: all 0.3s ease;
+            box-shadow: 0 4px 10px rgba(0,0,0,0.2);
+            margin: 5px;
+        }
+        
+        button:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 6px 15px rgba(0,0,0,0.3);
+        }
+        
+        .differences-table {
+            background: #f8f9fa;
+            border-radius: 15px;
+            padding: 30px;
+            margin: 30px 0;
+            overflow-x: auto;
+        }
+        
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            background: white;
+            border-radius: 10px;
+            overflow: hidden;
+        }
+        
+        th {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: white;
+            padding: 15px;
+            text-align: left;
+            font-size: 1.1em;
+        }
+        
+        td {
+            padding: 15px;
+            border-bottom: 1px solid #eee;
+        }
+        
+        tr:hover {
+            background: #f8f9fa;
+        }
+        
+        .key-point {
+            background: #e3f2fd;
+            padding: 20px;
+            border-radius: 10px;
+            margin: 20px 0;
+            border-left: 5px solid #2196f3;
+        }
+        
+        .key-point h4 {
+            color: #1976d2;
+            margin-bottom: 10px;
+        }
+        
+        @media (max-width: 768px) {
+            .comparison-visual,
+            .analogy-grid {
+                grid-template-columns: 1fr;
+            }
+            
+            .factory-demo {
+                flex-direction: column;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h1>🏭 Classe vs Instance d'Objet</h1>
+        <p class="subtitle">Comprendre la différence entre le plan et la construction</p>
+        
+        <div class="section">
+            <h2>📚 Définitions</h2>
+            <div class="comparison-visual">
+                <div class="visual-box">
+                    <h3>📐 Classe</h3>
+                    <div class="blueprint">
+                        <div class="blueprint-icon">📋</div>
+                        <p style="font-size: 1.2em;"><strong>Le Plan / Le Moule</strong></p>
+                    </div>
+                    <p style="margin: 15px 0;">Une classe est un <strong>modèle</strong> qui définit :</p>
+                    <ul style="margin-left: 20px; line-height: 1.8;">
+                        <li>Les propriétés (caractéristiques)</li>
+                        <li>Les méthodes (comportements)</li>
+                        <li>La structure générale</li>
+                    </ul>
+                    <p style="margin-top: 20px; font-style: italic;">C'est la définition, pas l'objet réel !</p>
+                </div>
+                
+                <div class="visual-box">
+                    <h3>🎯 Instance</h3>
+                    <div class="instances-container">
+                        <div class="instance">
+                            <h4>🚗 Instance 1</h4>
+                            <p>Voiture Rouge, 2020</p>
+                        </div>
+                        <div class="instance">
+                            <h4>🚗 Instance 2</h4>
+                            <p>Voiture Bleue, 2023</p>
+                        </div>
+                        <div class="instance">
+                            <h4>🚗 Instance 3</h4>
+                            <p>Voiture Verte, 2019</p>
+                        </div>
+                    </div>
+                    <p style="margin-top: 20px;">Une instance est un <strong>objet réel</strong> créé à partir de la classe.</p>
+                    <p style="margin-top: 10px; font-style: italic;">C'est l'objet concret avec ses propres valeurs !</p>
+                </div>
+            </div>
+        </div>
+        
+        <div class="section">
+            <div class="analogy-section">
+                <h3>🏠 Analogie : Maison</h3>
+                <div class="analogy-grid">
+                    <div class="analogy-card">
+                        <div class="analogy-icon">📐</div>
+                        <h4>Classe = Plan d'architecte</h4>
+                        <p style="margin-top: 15px;">Le plan d'une maison définit comment elle doit être construite : nombre de pièces, dimensions, matériaux...</p>
+                        <p style="margin-top: 10px; font-weight: bold;">On ne peut pas y habiter !</p>
+                    </div>
+                    
+                    <div class="analogy-card">
+                        <div class="analogy-icon">🏠</div>
+                        <h4>Instance = Maison construite</h4>
+                        <p style="margin-top: 15px;">Chaque maison construite à partir du même plan est une instance unique avec sa propre adresse, couleur, habitants...</p>
+                        <p style="margin-top: 10px; font-weight: bold;">On peut y habiter !</p>
+                    </div>
+                </div>
+                <p style="text-align: center; margin-top: 30px; font-size: 1.2em;">
+                    Un seul plan peut créer des milliers de maisons différentes !
+                </p>
+            </div>
+        </div>
+        
+        <div class="section">
+            <h2>💻 Code C# - La Classe</h2>
+            <div class="code-block">
+<span class="comment">// CLASSE : Le modèle / la définition</span><br>
+<span class="keyword">public class</span> <span class="class-name">Voiture</span><br>
+{<br>
+&nbsp;&nbsp;&nbsp;&nbsp;<span class="comment">// Propriétés (caractéristiques)</span><br>
+&nbsp;&nbsp;&nbsp;&nbsp;<span class="keyword">public string</span> Marque { <span class="keyword">get</span>; <span class="keyword">set</span>; }<br>
+&nbsp;&nbsp;&nbsp;&nbsp;<span class="keyword">public string</span> Couleur { <span class="keyword">get</span>; <span class="keyword">set</span>; }<br>
+&nbsp;&nbsp;&nbsp;&nbsp;<span class="keyword">public int</span> Annee { <span class="keyword">get</span>; <span class="keyword">set</span>; }<br>
+&nbsp;&nbsp;&nbsp;&nbsp;<span class="keyword">public double</span> VitesseActuelle { <span class="keyword">get</span>; <span class="keyword">set</span>; }<br>
+<br>
+&nbsp;&nbsp;&nbsp;&nbsp;<span class="comment">// Méthodes (comportements)</span><br>
+&nbsp;&nbsp;&nbsp;&nbsp;<span class="keyword">public void</span> <span class="method">Demarrer</span>()<br>
+&nbsp;&nbsp;&nbsp;&nbsp;{<br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Console.WriteLine(<span class="string">$"{Marque} démarre... 🚗"</span>);<br>
+&nbsp;&nbsp;&nbsp;&nbsp;}<br>
+<br>
+&nbsp;&nbsp;&nbsp;&nbsp;<span class="keyword">public void</span> <span class="method">Accelerer</span>(<span class="keyword">double</span> vitesse)<br>
+&nbsp;&nbsp;&nbsp;&nbsp;{<br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;VitesseActuelle += vitesse;<br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Console.WriteLine(<span class="string">$"Vitesse : {VitesseActuelle} km/h"</span>);<br>
+&nbsp;&nbsp;&nbsp;&nbsp;}<br>
+}<br>
+<br>
+<span class="comment">// ⚠️ À ce stade, AUCUNE voiture n'existe encore !</span><br>
+<span class="comment">// Nous avons juste défini ce qu'est une Voiture</span>
+            </div>
+        </div>
+        
+        <div class="section">
+            <h2>🎯 Code C# - Les Instances</h2>
+            <div class="code-block">
+<span class="comment">// INSTANCES : Les objets réels créés à partir de la classe</span><br>
+<br>
+<span class="comment">// Création de la première instance</span><br>
+<span class="class-name">Voiture</span> voiture1 = <span class="keyword">new</span> <span class="class-name">Voiture</span>();<br>
+voiture1.Marque = <span class="string">"BMW"</span>;<br>
+voiture1.Couleur = <span class="string">"Rouge"</span>;<br>
+voiture1.Annee = <span class="number">2023</span>;<br>
+<br>
+<span class="comment">// Création de la deuxième instance (complètement indépendante)</span><br>
+<span class="class-name">Voiture</span> voiture2 = <span class="keyword">new</span> <span class="class-name">Voiture</span>();<br>
+voiture2.Marque = <span class="string">"Toyota"</span>;<br>
+voiture2.Couleur = <span class="string">"Bleue"</span>;<br>
+voiture2.Annee = <span class="number">2020</span>;<br>
+<br>
+<span class="comment">// Création de la troisième instance</span><br>
+<span class="class-name">var</span> voiture3 = <span class="keyword">new</span> <span class="class-name">Voiture</span><br>
+{<br>
+&nbsp;&nbsp;&nbsp;&nbsp;Marque = <span class="string">"Mercedes"</span>,<br>
+&nbsp;&nbsp;&nbsp;&nbsp;Couleur = <span class="string">"Noire"</span>,<br>
+&nbsp;&nbsp;&nbsp;&nbsp;Annee = <span class="number">2024</span><br>
+};<br>
+<br>
+<span class="comment">// Chaque instance a ses propres valeurs</span><br>
+voiture1.Demarrer();&nbsp;&nbsp;<span class="comment">// BMW démarre... 🚗</span><br>
+voiture2.Demarrer();&nbsp;&nbsp;<span class="comment">// Toyota démarre... 🚗</span><br>
+voiture3.Demarrer();&nbsp;&nbsp;<span class="comment">// Mercedes démarre... 🚗</span><br>
+<br>
+<span class="comment">// Les instances sont indépendantes !</span><br>
+voiture1.Accelerer(<span class="number">50</span>);&nbsp;&nbsp;<span class="comment">// Affecte uniquement voiture1</span><br>
+Console.WriteLine(voiture2.VitesseActuelle);&nbsp;&nbsp;<span class="comment">// 0 (non affectée)</span>
+            </div>
+        </div>
+        
+        <div class="section">
+            <h2>🏭 Démonstration Interactive</h2>
+            <div class="interactive-section">
+                <div class="factory-demo">
+                    <div class="factory">
+                        <div class="analogy-icon">🏭</div>
+                        <h4>Usine Voiture</h4>
+                        <p style="margin: 15px 0;">Cliquez pour créer des instances !</p>
+                        <button onclick="creerVoiture()">🚗 Créer une Voiture</button>
+                        <button onclick="reinitialiser()">🔄 Réinitialiser</button>
+                        <p style="margin-top: 20px; font-size: 1.2em;">
+                            <strong>Instances créées :</strong> <span id="count">0</span>
+                        </p>
+                    </div>
+                    
+                    <div class="products">
+                        <h4>Instances de Voitures</h4>
+                        <div class="product-grid" id="voitures">
+                            <p style="color: #666; text-align: center; padding: 20px;">Aucune voiture créée pour le moment...</p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        
+        <div class="section">
+            <h2>📊 Tableau Comparatif</h2>
+            <div class="differences-table">
+                <table>
+                    <thead>
+                        <tr>
+                            <th>Aspect</th>
+                            <th>Classe</th>
+                            <th>Instance</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr>
+                            <td><strong>Nature</strong></td>
+                            <td>Modèle abstrait / Plan</td>
+                            <td>Objet concret / Réalisation</td>
+                        </tr>
+                        <tr>
+                            <td><strong>Quantité</strong></td>
+                            <td>Une seule définition</td>
+                            <td>Peut avoir plusieurs instances</td>
+                        </tr>
+                        <tr>
+                            <td><strong>Mémoire</strong></td>
+                            <td>Pas d'allocation (juste définition)</td>
+                            <td>Occupe de la mémoire</td>
+                        </tr>
+                        <tr>
+                            <td><strong>Valeurs</strong></td>
+                            <td>Pas de valeurs spécifiques</td>
+                            <td>Possède ses propres valeurs</td>
+                        </tr>
+                        <tr>
+                            <td><strong>Utilisation</strong></td>
+                            <td>Sert de moule pour créer des objets</td>
+                            <td>Peut être utilisée et manipulée</td>
+                        </tr>
+                        <tr>
+                            <td><strong>Mot-clé</strong></td>
+                            <td><code>class NomClasse { }</code></td>
+                            <td><code>new NomClasse()</code></td>
+                        </tr>
+                        <tr>
+                            <td><strong>Analogie</strong></td>
+                            <td>Recette de cuisine</td>
+                            <td>Plat préparé</td>
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
+        </div>
+        
+        <div class="section">
+            <h2>💡 Points Clés à Retenir</h2>
+            <div class="key-point">
+                <h4>🎯 Une classe = Un modèle</h4>
+                <p>La classe définit la structure : quelles propriétés et méthodes existent, mais sans valeurs concrètes.</p>
+            </div>
+            <div class="key-point">
+                <h4>🏗️ Une instance = Un objet réel</h4>
+                <p>Chaque instance est un objet unique créé à partir de la classe, avec ses propres valeurs.</p>
+            </div>
+            <div class="key-point">
+                <h4>🔢 Plusieurs instances possibles</h4>
+                <p>À partir d'une seule classe, vous pouvez créer autant d'instances que vous voulez (des milliers, des millions...)</p>
+            </div>
+            <div class="key-point">
+                <h4>🚫 Indépendance des instances</h4>
+                <p>Modifier une instance n'affecte pas les autres instances, même si elles viennent de la même classe.</p>
+            </div>
+            <div class="key-point">
+                <h4>⚙️ Mot-clé 'new'</h4>
+                <p>Le mot-clé <code>new</code> est utilisé pour créer une nouvelle instance d'une classe.</p>
+            </div>
+        </div>
+        
+        <div class="section">
+            <h2>🎓 Autres Analogies</h2>
+            <div class="analogy-grid" style="background: white; padding: 30px; border-radius: 15px;">
+                <div style="padding: 20px; background: #f8f9fa; border-radius: 10px;">
+                    <div style="font-size: 3em; text-align: center; margin-bottom: 10px;">🍪</div>
+                    <h4 style="color: #667eea; text-align: center; margin-bottom: 10px;">Emporte-pièce</h4>
+                    <p><strong>Classe :</strong> L'emporte-pièce</p>
+                    <p><strong>Instance :</strong> Chaque biscuit découpé</p>
+                </div>
+                
+                <div style="padding: 20px; background: #f8f9fa; border-radius: 10px;">
+                    <div style="font-size: 3em; text-align: center; margin-bottom: 10px;">📖</div>
+                    <h4 style="color: #667eea; text-align: center; margin-bottom: 10px;">Livre</h4>
+                    <p><strong>Classe :</strong> Le manuscrit original</p>
+                    <p><strong>Instance :</strong> Chaque copie imprimée</p>
+                </div>
+                
+                <div style="padding: 20px; background: #f8f9fa; border-radius: 10px;">
+                    <div style="font-size: 3em; text-align: center; margin-bottom: 10px;">👤</div>
+                    <h4 style="color: #667eea; text-align: center; margin-bottom: 10px;">Personne</h4>
+                    <p><strong>Classe :</strong> Le concept de "Personne"</p>
+                    <p><strong>Instance :</strong> Vous, moi, chaque individu</p>
+                </div>
+                
+                <div style="padding: 20px; background: #f8f9fa; border-radius: 10px;">
+                    <div style="font-size: 3em; text-align: center; margin-bottom: 10px;">🎮</div>
+                    <h4 style="color: #667eea; text-align: center; margin-bottom: 10px;">Jeu vidéo</h4>
+                    <p><strong>Classe :</strong> Le personnage "Joueur"</p>
+                    <p><strong>Instance :</strong> Chaque profil de joueur créé</p>
+                </div>
+            </div>
+        </div>
+    </div>
+    
+    <script>
+        let compteur = 0;
+        const marques = ['BMW', 'Toyota', 'Mercedes', 'Audi', 'Porsche', 'Tesla', 'Ferrari', 'Lamborghini'];
+        const couleurs = ['Rouge', 'Bleue', 'Verte', 'Noire', 'Blanche', 'Grise', 'Jaune', 'Orange'];
+        
+        function creerVoiture() {
+            compteur++;
+            const marque = marques[Math.floor(Math.random() * marques.length)];
+            const couleur = couleurs[Math.floor(Math.random() * couleurs.length)];
+            const annee = 2018 + Math.floor(Math.random() * 7);
+            
+            const container = document.getElementById('voitures');
+            
+            // Supprimer le message "aucune voiture" si c'est la première
+            if (compteur === 1) {
+                container.innerHTML = '';
+            }
+            
+            const voitureCard = document.createElement('div');
+            voitureCard.className = 'product-card';
+            voitureCard.innerHTML = `
+                <h5>🚗 Instance ${compteur}</h5>
+                <p><strong>Marque:</strong> ${marque}</p>
+                <p><strong>Couleur:</strong> ${couleur}</p>
+                <p><strong>Année:</strong> ${annee}</p>
+                <p style="margin-top: 10px; font-size: 0.9em; color: #666;">
+                    Créée avec <code>new Voiture()</code>
+                </p>
+            `;
+            
+            container.appendChild(voitureCard);
+            document.getElementById('count').textContent = compteur;
+            
+            // Animation d'apparition
+            setTimeout(() => {
+                voitureCard.style.animation = 'none';
+            }, 500);
+        }
+        
+        function reinitialiser() {
+            compteur = 0;
+            document.getElementById('count').textContent = '0';
+            document.getElementById('voitures').innerHTML = '<p style="color: #666; text-align: center; padding: 20px;">Aucune voiture créée pour le moment...</p>';
+        }
+    </script>
+</body>
+</html>

@@ -1,0 +1,925 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Abstraction en C# .NET</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+        
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background: linear-gradient(135deg, #a8edea 0%, #fed6e3 100%);
+            padding: 20px;
+            min-height: 100vh;
+        }
+        
+        .container {
+            max-width: 1400px;
+            margin: 0 auto;
+            background: white;
+            border-radius: 20px;
+            padding: 40px;
+            box-shadow: 0 20px 60px rgba(0,0,0,0.3);
+        }
+        
+        h1 {
+            color: #667eea;
+            text-align: center;
+            margin-bottom: 10px;
+            font-size: 2.5em;
+        }
+        
+        .subtitle {
+            text-align: center;
+            color: #666;
+            margin-bottom: 40px;
+            font-size: 1.1em;
+        }
+        
+        .section {
+            margin-bottom: 40px;
+        }
+        
+        h2 {
+            color: #764ba2;
+            margin-bottom: 20px;
+            padding-bottom: 10px;
+            border-bottom: 3px solid #667eea;
+        }
+        
+        .concept-visual {
+            display: flex;
+            justify-content: space-around;
+            align-items: center;
+            margin: 40px 0;
+            gap: 30px;
+            flex-wrap: wrap;
+        }
+        
+        .visual-box {
+            flex: 1;
+            min-width: 280px;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: white;
+            padding: 30px;
+            border-radius: 20px;
+            box-shadow: 0 10px 30px rgba(0,0,0,0.2);
+            transition: all 0.3s ease;
+        }
+        
+        .visual-box:hover {
+            transform: translateY(-10px);
+            box-shadow: 0 15px 40px rgba(0,0,0,0.3);
+        }
+        
+        .visual-box h3 {
+            font-size: 1.8em;
+            margin-bottom: 20px;
+            text-align: center;
+        }
+        
+        .visual-box .content {
+            background: rgba(255,255,255,0.15);
+            padding: 20px;
+            border-radius: 15px;
+            margin: 10px 0;
+        }
+        
+        .visual-box .icon {
+            font-size: 3em;
+            text-align: center;
+            margin-bottom: 15px;
+        }
+        
+        .arrow {
+            font-size: 3em;
+            color: #667eea;
+        }
+        
+        .comparison-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+            gap: 25px;
+            margin: 30px 0;
+        }
+        
+        .comparison-card {
+            background: #f8f9fa;
+            border-radius: 15px;
+            padding: 25px;
+            border-left: 5px solid #667eea;
+            transition: all 0.3s ease;
+        }
+        
+        .comparison-card:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 10px 25px rgba(0,0,0,0.1);
+        }
+        
+        .comparison-card.abstract {
+            border-left-color: #e74c3c;
+        }
+        
+        .comparison-card.interface {
+            border-left-color: #3498db;
+        }
+        
+        .comparison-card h3 {
+            color: #667eea;
+            margin-bottom: 15px;
+            font-size: 1.4em;
+        }
+        
+        .comparison-card.abstract h3 {
+            color: #e74c3c;
+        }
+        
+        .comparison-card.interface h3 {
+            color: #3498db;
+        }
+        
+        .code-block {
+            background: #282c34;
+            color: #abb2bf;
+            padding: 20px;
+            border-radius: 10px;
+            overflow-x: auto;
+            margin: 20px 0;
+            font-family: 'Courier New', monospace;
+            font-size: 0.95em;
+            line-height: 1.6;
+        }
+        
+        .keyword {
+            color: #c678dd;
+        }
+        
+        .class-name {
+            color: #e5c07b;
+        }
+        
+        .method {
+            color: #61afef;
+        }
+        
+        .string {
+            color: #98c379;
+        }
+        
+        .comment {
+            color: #5c6370;
+            font-style: italic;
+        }
+        
+        .number {
+            color: #d19a66;
+        }
+        
+        .demo-section {
+            background: linear-gradient(135deg, #f8f9fa 0%, #e9ecef 100%);
+            padding: 30px;
+            border-radius: 15px;
+            margin: 30px 0;
+        }
+        
+        .demo-buttons {
+            display: flex;
+            gap: 15px;
+            margin: 20px 0;
+            flex-wrap: wrap;
+        }
+        
+        button {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: white;
+            border: none;
+            padding: 15px 30px;
+            border-radius: 10px;
+            cursor: pointer;
+            font-size: 1em;
+            transition: all 0.3s ease;
+            box-shadow: 0 4px 10px rgba(0,0,0,0.2);
+        }
+        
+        button:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 6px 15px rgba(0,0,0,0.3);
+        }
+        
+        .output {
+            background: white;
+            padding: 20px;
+            border-radius: 10px;
+            margin-top: 20px;
+            min-height: 100px;
+            border-left: 5px solid #667eea;
+        }
+        
+        .table-container {
+            background: #f8f9fa;
+            border-radius: 15px;
+            padding: 30px;
+            margin: 30px 0;
+            overflow-x: auto;
+        }
+        
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            background: white;
+            border-radius: 10px;
+            overflow: hidden;
+        }
+        
+        th {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: white;
+            padding: 15px;
+            text-align: left;
+            font-size: 1.1em;
+        }
+        
+        td {
+            padding: 15px;
+            border-bottom: 1px solid #eee;
+        }
+        
+        tr:hover {
+            background: #f8f9fa;
+        }
+        
+        .check {
+            color: #27ae60;
+            font-size: 1.5em;
+            font-weight: bold;
+        }
+        
+        .cross {
+            color: #e74c3c;
+            font-size: 1.5em;
+            font-weight: bold;
+        }
+        
+        .advantage {
+            background: #e8f5e9;
+            padding: 15px;
+            border-radius: 10px;
+            margin: 10px 0;
+            border-left: 5px solid #4caf50;
+        }
+        
+        .advantage h4 {
+            color: #2e7d32;
+            margin-bottom: 5px;
+        }
+        
+        .tip {
+            background: #fff3cd;
+            color: #856404;
+            padding: 20px;
+            border-radius: 10px;
+            margin: 20px 0;
+            border-left: 5px solid #ffc107;
+        }
+        
+        .tip h4 {
+            margin-bottom: 10px;
+            color: #856404;
+        }
+        
+        .example-box {
+            background: white;
+            padding: 20px;
+            border-radius: 10px;
+            margin: 15px 0;
+            border: 2px solid #667eea;
+        }
+        
+        .layers {
+            display: flex;
+            flex-direction: column;
+            gap: 15px;
+            margin: 30px 0;
+        }
+        
+        .layer {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: white;
+            padding: 20px;
+            border-radius: 15px;
+            box-shadow: 0 5px 15px rgba(0,0,0,0.2);
+            transition: all 0.3s ease;
+        }
+        
+        .layer:hover {
+            transform: translateX(10px);
+        }
+        
+        .layer h4 {
+            font-size: 1.3em;
+            margin-bottom: 10px;
+        }
+        
+        .layer.high-level {
+            background: linear-gradient(135deg, #a8edea 0%, #fed6e3 100%);
+            color: #333;
+        }
+        
+        .layer.low-level {
+            background: linear-gradient(135deg, #2c3e50 0%, #3498db 100%);
+        }
+        
+        @media (max-width: 768px) {
+            .comparison-grid {
+                grid-template-columns: 1fr;
+            }
+            
+            .concept-visual {
+                flex-direction: column;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h1>🎨 Abstraction en C# .NET</h1>
+        <p class="subtitle">Cacher la complexité et exposer l'essentiel</p>
+        
+        <div class="section">
+            <h2>📚 Qu'est-ce que l'Abstraction ?</h2>
+            <p>L'abstraction est le processus de cacher les détails d'implémentation complexes et de n'exposer que les fonctionnalités essentielles. C'est comme utiliser une télécommande : vous appuyez sur un bouton sans avoir besoin de comprendre l'électronique interne !</p>
+        </div>
+        
+        <div class="section">
+            <h2>🎯 Concept Visuel</h2>
+            <div class="concept-visual">
+                <div class="visual-box">
+                    <div class="icon">🔍</div>
+                    <h3>Vue Utilisateur</h3>
+                    <div class="content">
+                        <strong>Ce que vous voyez :</strong><br>
+                        • Interface simple<br>
+                        • Méthodes claires<br>
+                        • Comportement attendu<br><br>
+                        <em>Exemple : voiture.Demarrer()</em>
+                    </div>
+                </div>
+                
+                <div class="arrow">→</div>
+                
+                <div class="visual-box">
+                    <div class="icon">⚙️</div>
+                    <h3>Implémentation Cachée</h3>
+                    <div class="content">
+                        <strong>Ce qui est masqué :</strong><br>
+                        • Détails techniques<br>
+                        • Logique complexe<br>
+                        • Mécanismes internes<br><br>
+                        <em>Injection carburant, allumage, etc.</em>
+                    </div>
+                </div>
+            </div>
+        </div>
+        
+        <div class="section">
+            <h2>🔧 Les Deux Formes d'Abstraction en C#</h2>
+            <div class="comparison-grid">
+                <div class="comparison-card abstract">
+                    <h3>📝 Classes Abstraites</h3>
+                    <p><strong>Définition :</strong> Une classe qui ne peut pas être instanciée directement et peut contenir des méthodes abstraites et concrètes.</p>
+                    <br>
+                    <p><strong>Caractéristiques :</strong></p>
+                    <ul style="margin-left: 20px; line-height: 1.8;">
+                        <li>Mot-clé <code>abstract</code></li>
+                        <li>Peut avoir des méthodes implémentées</li>
+                        <li>Peut avoir des champs</li>
+                        <li>Héritage simple uniquement</li>
+                        <li>Peut avoir des constructeurs</li>
+                    </ul>
+                </div>
+                
+                <div class="comparison-card interface">
+                    <h3>🔌 Interfaces</h3>
+                    <p><strong>Définition :</strong> Un contrat qui définit des signatures de méthodes sans implémentation (avant C# 8.0).</p>
+                    <br>
+                    <p><strong>Caractéristiques :</strong></p>
+                    <ul style="margin-left: 20px; line-height: 1.8;">
+                        <li>Mot-clé <code>interface</code></li>
+                        <li>Pas d'implémentation (sauf défaut en C# 8+)</li>
+                        <li>Pas de champs</li>
+                        <li>Implémentation multiple possible</li>
+                        <li>Pas de constructeurs</li>
+                    </ul>
+                </div>
+            </div>
+        </div>
+        
+        <div class="section">
+            <h2>💻 Code C# - Classes Abstraites</h2>
+            <div class="code-block">
+<span class="comment">// Classe abstraite - ne peut pas être instanciée</span><br>
+<span class="keyword">public abstract class</span> <span class="class-name">FormeGeometrique</span><br>
+{<br>
+&nbsp;&nbsp;&nbsp;&nbsp;<span class="comment">// Propriété concrète</span><br>
+&nbsp;&nbsp;&nbsp;&nbsp;<span class="keyword">public string</span> Couleur { <span class="keyword">get</span>; <span class="keyword">set</span>; }<br>
+<br>
+&nbsp;&nbsp;&nbsp;&nbsp;<span class="comment">// Méthode abstraite - doit être implémentée</span><br>
+&nbsp;&nbsp;&nbsp;&nbsp;<span class="keyword">public abstract double</span> <span class="method">CalculerAire</span>();<br>
+<br>
+&nbsp;&nbsp;&nbsp;&nbsp;<span class="comment">// Méthode abstraite</span><br>
+&nbsp;&nbsp;&nbsp;&nbsp;<span class="keyword">public abstract double</span> <span class="method">CalculerPerimetre</span>();<br>
+<br>
+&nbsp;&nbsp;&nbsp;&nbsp;<span class="comment">// Méthode concrète - déjà implémentée</span><br>
+&nbsp;&nbsp;&nbsp;&nbsp;<span class="keyword">public void</span> <span class="method">Afficher</span>()<br>
+&nbsp;&nbsp;&nbsp;&nbsp;{<br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Console.WriteLine(<span class="string">$"Forme de couleur {Couleur}"</span>);<br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Console.WriteLine(<span class="string">$"Aire: {<span class="method">CalculerAire</span>()}"</span>);<br>
+&nbsp;&nbsp;&nbsp;&nbsp;}<br>
+}<br>
+<br>
+<span class="comment">// Classe concrète qui hérite de la classe abstraite</span><br>
+<span class="keyword">public class</span> <span class="class-name">Cercle</span> : <span class="class-name">FormeGeometrique</span><br>
+{<br>
+&nbsp;&nbsp;&nbsp;&nbsp;<span class="keyword">public double</span> Rayon { <span class="keyword">get</span>; <span class="keyword">set</span>; }<br>
+<br>
+&nbsp;&nbsp;&nbsp;&nbsp;<span class="comment">// Implémentation obligatoire</span><br>
+&nbsp;&nbsp;&nbsp;&nbsp;<span class="keyword">public override double</span> <span class="method">CalculerAire</span>()<br>
+&nbsp;&nbsp;&nbsp;&nbsp;{<br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<span class="keyword">return</span> Math.PI * Rayon * Rayon;<br>
+&nbsp;&nbsp;&nbsp;&nbsp;}<br>
+<br>
+&nbsp;&nbsp;&nbsp;&nbsp;<span class="keyword">public override double</span> <span class="method">CalculerPerimetre</span>()<br>
+&nbsp;&nbsp;&nbsp;&nbsp;{<br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<span class="keyword">return</span> <span class="number">2</span> * Math.PI * Rayon;<br>
+&nbsp;&nbsp;&nbsp;&nbsp;}<br>
+}<br>
+<br>
+<span class="keyword">public class</span> <span class="class-name">Rectangle</span> : <span class="class-name">FormeGeometrique</span><br>
+{<br>
+&nbsp;&nbsp;&nbsp;&nbsp;<span class="keyword">public double</span> Largeur { <span class="keyword">get</span>; <span class="keyword">set</span>; }<br>
+&nbsp;&nbsp;&nbsp;&nbsp;<span class="keyword">public double</span> Hauteur { <span class="keyword">get</span>; <span class="keyword">set</span>; }<br>
+<br>
+&nbsp;&nbsp;&nbsp;&nbsp;<span class="keyword">public override double</span> <span class="method">CalculerAire</span>()<br>
+&nbsp;&nbsp;&nbsp;&nbsp;{<br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<span class="keyword">return</span> Largeur * Hauteur;<br>
+&nbsp;&nbsp;&nbsp;&nbsp;}<br>
+<br>
+&nbsp;&nbsp;&nbsp;&nbsp;<span class="keyword">public override double</span> <span class="method">CalculerPerimetre</span>()<br>
+&nbsp;&nbsp;&nbsp;&nbsp;{<br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<span class="keyword">return</span> <span class="number">2</span> * (Largeur + Hauteur);<br>
+&nbsp;&nbsp;&nbsp;&nbsp;}<br>
+}<br>
+<br>
+<span class="comment">// ❌ ERREUR : impossible d'instancier une classe abstraite</span><br>
+<span class="comment">// FormeGeometrique forme = new FormeGeometrique();</span><br>
+<br>
+<span class="comment">// ✅ OK : instanciation des classes concrètes</span><br>
+<span class="class-name">Cercle</span> cercle = <span class="keyword">new</span> <span class="class-name">Cercle</span> { Rayon = <span class="number">5</span>, Couleur = <span class="string">"Rouge"</span> };<br>
+cercle.Afficher();&nbsp;&nbsp;<span class="comment">// Utilise la méthode héritée</span>
+            </div>
+        </div>
+        
+        <div class="section">
+            <h2>💻 Code C# - Interfaces</h2>
+            <div class="code-block">
+<span class="comment">// Interface - contrat à respecter</span><br>
+<span class="keyword">public interface</span> <span class="class-name">IVolable</span><br>
+{<br>
+&nbsp;&nbsp;&nbsp;&nbsp;<span class="comment">// Signature de méthode (pas d'implémentation)</span><br>
+&nbsp;&nbsp;&nbsp;&nbsp;<span class="keyword">void</span> <span class="method">Decoller</span>();<br>
+&nbsp;&nbsp;&nbsp;&nbsp;<span class="keyword">void</span> <span class="method">Voler</span>();<br>
+&nbsp;&nbsp;&nbsp;&nbsp;<span class="keyword">void</span> <span class="method">Atterrir</span>();<br>
+<br>
+&nbsp;&nbsp;&nbsp;&nbsp;<span class="comment">// Propriété</span><br>
+&nbsp;&nbsp;&nbsp;&nbsp;<span class="keyword">double</span> AltitudeMax { <span class="keyword">get</span>; <span class="keyword">set</span>; }<br>
+}<br>
+<br>
+<span class="keyword">public interface</span> <span class="class-name">IRechargeableElectriquement</span><br>
+{<br>
+&nbsp;&nbsp;&nbsp;&nbsp;<span class="keyword">void</span> <span class="method">Recharger</span>(<span class="keyword">int</span> pourcentage);<br>
+&nbsp;&nbsp;&nbsp;&nbsp;<span class="keyword">int</span> NiveauBatterie { <span class="keyword">get</span>; }<br>
+}<br>
+<br>
+<span class="comment">// Classe implémentant plusieurs interfaces</span><br>
+<span class="keyword">public class</span> <span class="class-name">Drone</span> : <span class="class-name">IVolable</span>, <span class="class-name">IRechargeableElectriquement</span><br>
+{<br>
+&nbsp;&nbsp;&nbsp;&nbsp;<span class="keyword">private int</span> batterie = <span class="number">100</span>;<br>
+<br>
+&nbsp;&nbsp;&nbsp;&nbsp;<span class="comment">// Implémentation de IVolable</span><br>
+&nbsp;&nbsp;&nbsp;&nbsp;<span class="keyword">public double</span> AltitudeMax { <span class="keyword">get</span>; <span class="keyword">set</span>; } = <span class="number">500</span>;<br>
+<br>
+&nbsp;&nbsp;&nbsp;&nbsp;<span class="keyword">public void</span> <span class="method">Decoller</span>()<br>
+&nbsp;&nbsp;&nbsp;&nbsp;{<br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Console.WriteLine(<span class="string">"🚁 Le drone décolle..."</span>);<br>
+&nbsp;&nbsp;&nbsp;&nbsp;}<br>
+<br>
+&nbsp;&nbsp;&nbsp;&nbsp;<span class="keyword">public void</span> <span class="method">Voler</span>()<br>
+&nbsp;&nbsp;&nbsp;&nbsp;{<br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Console.WriteLine(<span class="string">"🚁 Le drone vole..."</span>);<br>
+&nbsp;&nbsp;&nbsp;&nbsp;}<br>
+<br>
+&nbsp;&nbsp;&nbsp;&nbsp;<span class="keyword">public void</span> <span class="method">Atterrir</span>()<br>
+&nbsp;&nbsp;&nbsp;&nbsp;{<br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Console.WriteLine(<span class="string">"🚁 Le drone atterrit..."</span>);<br>
+&nbsp;&nbsp;&nbsp;&nbsp;}<br>
+<br>
+&nbsp;&nbsp;&nbsp;&nbsp;<span class="comment">// Implémentation de IRechargeableElectriquement</span><br>
+&nbsp;&nbsp;&nbsp;&nbsp;<span class="keyword">public int</span> NiveauBatterie => batterie;<br>
+<br>
+&nbsp;&nbsp;&nbsp;&nbsp;<span class="keyword">public void</span> <span class="method">Recharger</span>(<span class="keyword">int</span> pourcentage)<br>
+&nbsp;&nbsp;&nbsp;&nbsp;{<br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;batterie = Math.Min(<span class="number">100</span>, batterie + pourcentage);<br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Console.WriteLine(<span class="string">$"🔋 Batterie: {batterie}%"</span>);<br>
+&nbsp;&nbsp;&nbsp;&nbsp;}<br>
+}<br>
+<br>
+<span class="comment">// Un avion peut aussi implémenter IVolable</span><br>
+<span class="keyword">public class</span> <span class="class-name">Avion</span> : <span class="class-name">IVolable</span><br>
+{<br>
+&nbsp;&nbsp;&nbsp;&nbsp;<span class="keyword">public double</span> AltitudeMax { <span class="keyword">get</span>; <span class="keyword">set</span>; } = <span class="number">12000</span>;<br>
+<br>
+&nbsp;&nbsp;&nbsp;&nbsp;<span class="keyword">public void</span> <span class="method">Decoller</span>() => Console.WriteLine(<span class="string">"✈️ L'avion décolle"</span>);<br>
+&nbsp;&nbsp;&nbsp;&nbsp;<span class="keyword">public void</span> <span class="method">Voler</span>() => Console.WriteLine(<span class="string">"✈️ L'avion vole"</span>);<br>
+&nbsp;&nbsp;&nbsp;&nbsp;<span class="keyword">public void</span> <span class="method">Atterrir</span>() => Console.WriteLine(<span class="string">"✈️ L'avion atterrit"</span>);<br>
+}
+            </div>
+        </div>
+        
+        <div class="section">
+            <h2>📊 Comparaison : Classe Abstraite vs Interface</h2>
+            <div class="table-container">
+                <table>
+                    <thead>
+                        <tr>
+                            <th>Caractéristique</th>
+                            <th>Classe Abstraite</th>
+                            <th>Interface</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr>
+                            <td><strong>Mot-clé</strong></td>
+                            <td><code>abstract class</code></td>
+                            <td><code>interface</code></td>
+                        </tr>
+                        <tr>
+                            <td><strong>Implémentation</strong></td>
+                            <td class="check">✓ Méthodes concrètes possibles</td>
+                            <td class="cross">✗ Pas d'implémentation (avant C# 8)</td>
+                        </tr>
+                        <tr>
+                            <td><strong>Champs</strong></td>
+                            <td class="check">✓ Peut avoir des champs</td>
+                            <td class="cross">✗ Pas de champs</td>
+                        </tr>
+                        <tr>
+                            <td><strong>Constructeurs</strong></td>
+                            <td class="check">✓ Peut avoir des constructeurs</td>
+                            <td class="cross">✗ Pas de constructeurs</td>
+                        </tr>
+                        <tr>
+                            <td><strong>Héritage multiple</strong></td>
+                            <td class="cross">✗ Héritage simple uniquement</td>
+                            <td class="check">✓ Implémentation multiple</td>
+                        </tr>
+                        <tr>
+                            <td><strong>Modificateurs d'accès</strong></td>
+                            <td class="check">✓ Tous les modificateurs</td>
+                            <td>Public par défaut</td>
+                        </tr>
+                        <tr>
+                            <td><strong>Quand l'utiliser</strong></td>
+                            <td>Relation "est-un", code commun</td>
+                            <td>Relation "peut-faire", contrat</td>
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
+        </div>
+        
+        <div class="section">
+            <h2>🎮 Démonstration Interactive</h2>
+            <div class="demo-section">
+                <p>Explorez les concepts d'abstraction :</p>
+                <div class="demo-buttons">
+                    <button onclick="demoAbstractClass()">Classe Abstraite</button>
+                    <button onclick="demoInterface()">Interface</button>
+                    <button onclick="demoPolymorphisme()">Polymorphisme</button>
+                    <button onclick="demoMultipleInterfaces()">Interfaces Multiples</button>
+                    <button onclick="demoQuandUtiliser()">Quand utiliser quoi ?</button>
+                </div>
+                <div class="output" id="output">
+                    Cliquez sur un bouton pour voir la démonstration...
+                </div>
+            </div>
+        </div>
+        
+        <div class="section">
+            <h2>🎯 Niveaux d'Abstraction</h2>
+            <div class="layers">
+                <div class="layer high-level">
+                    <h4>🔝 Niveau Haut (Abstraction)</h4>
+                    <p><strong>Ce que voit l'utilisateur :</strong> voiture.Demarrer(), voiture.Accelerer(), voiture.Freiner()</p>
+                    <p><em>Simple, clair, facile à utiliser</em></p>
+                </div>
+                
+                <div class="layer">
+                    <h4>⚙️ Niveau Moyen (Implémentation)</h4>
+                    <p><strong>Ce qui se passe :</strong> Vérification du système, injection carburant, allumage moteur</p>
+                    <p><em>Logique métier, algorithmes</em></p>
+                </div>
+                
+                <div class="layer low-level">
+                    <h4>🔧 Niveau Bas (Détails techniques)</h4>
+                    <p><strong>Détails cachés :</strong> Gestion mémoire, accès hardware, optimisations</p>
+                    <p><em>Complexité cachée à l'utilisateur</em></p>
+                </div>
+            </div>
+        </div>
+        
+        <div class="section">
+            <h2>✨ Avantages de l'Abstraction</h2>
+            <div class="advantage">
+                <h4>🎯 Simplicité</h4>
+                <p>Réduit la complexité en cachant les détails d'implémentation inutiles.</p>
+            </div>
+            <div class="advantage">
+                <h4>🔧 Maintenance facilitée</h4>
+                <p>Les changements d'implémentation n'affectent pas le code qui utilise l'abstraction.</p>
+            </div>
+            <div class="advantage">
+                <h4>♻️ Réutilisabilité</h4>
+                <p>Le code abstrait peut être réutilisé avec différentes implémentations.</p>
+            </div>
+            <div class="advantage">
+                <h4>📋 Standardisation</h4>
+                <p>Les interfaces définissent des contrats clairs que toutes les implémentations doivent respecter.</p>
+            </div>
+            <div class="advantage">
+                <h4>🧪 Testabilité</h4>
+                <p>Facilite les tests unitaires en permettant l'utilisation de mocks et stubs.</p>
+            </div>
+        </div>
+        
+        <div class="section">
+            <h2>💡 Conseils et Bonnes Pratiques</h2>
+            <div class="tip">
+                <h4>🎯 Classe Abstraite : Quand l'utiliser ?</h4>
+                <p>Utilisez une classe abstraite quand vous avez du code commun à partager entre plusieurs classes liées (relation "est-un"). Exemple : Animal → Chien, Chat.</p>
+            </div>
+            <div class="tip">
+                <h4>🔌 Interface : Quand l'utiliser ?</h4>
+                <p>Utilisez une interface pour définir un contrat ou une capacité (relation "peut-faire"). Exemple : IVolable peut être implémenté par Avion, Drone, Oiseau.</p>
+            </div>
+            <div class="tip">
+                <h4>📝 Convention de nommage</h4>
+                <p>Les interfaces commencent par "I" (IVolable, IDisposable, IComparable). Les classes abstraites suivent la convention normale (Animal, Vehicule).</p>
+            </div>
+            <div class="tip">
+                <h4>⚖️ Principe de ségrégation des interfaces</h4>
+                <p>Préférez plusieurs petites interfaces spécifiques plutôt qu'une grande interface générale. Cela évite de forcer les classes à implémenter des méthodes inutiles.</p>
+            </div>
+            <div class="tip">
+                <h4>🎨 Programmez vers l'abstraction</h4>
+                <p>Déclarez vos variables avec le type abstrait ou interface, pas le type concret : <code>IVolable objet</code> au lieu de <code>Drone objet</code>.</p>
+            </div>
+        </div>
+        
+        <div class="section">
+            <h2>💻 Exemple Complet : Système de Paiement</h2>
+            <div class="code-block">
+<span class="comment">// Interface définissant le contrat de paiement</span><br>
+<span class="keyword">public interface</span> <span class="class-name">IMethodePaiement</span><br>
+{<br>
+&nbsp;&nbsp;&nbsp;&nbsp;<span class="keyword">bool</span> <span class="method">Payer</span>(<span class="keyword">decimal</span> montant);<br>
+&nbsp;&nbsp;&nbsp;&nbsp;<span class="keyword">string</span> <span class="method">ObtenirNomMethode</span>();<br>
+}<br>
+<br>
+<span class="comment">// Implémentation pour carte de crédit</span><br>
+<span class="keyword">public class</span> <span class="class-name">PaiementCarteBancaire</span> : <span class="class-name">IMethodePaiement</span><br>
+{<br>
+&nbsp;&nbsp;&nbsp;&nbsp;<span class="keyword">private string</span> numeroCarte;<br>
+<br>
+&nbsp;&nbsp;&nbsp;&nbsp;<span class="keyword">public</span> <span class="method">PaiementCarteBancaire</span>(<span class="keyword">string</span> numero)<br>
+&nbsp;&nbsp;&nbsp;&nbsp;{<br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;numeroCarte = numero;<br>
+&nbsp;&nbsp;&nbsp;&nbsp;}<br>
+<br>
+&nbsp;&nbsp;&nbsp;&nbsp;<span class="keyword">public bool</span> <span class="method">Payer</span>(<span class="keyword">decimal</span> montant)<br>
+&nbsp;&nbsp;&nbsp;&nbsp;{<br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Console.WriteLine(<span class="string">$"💳 Paiement de {montant}€ par carte ****{numeroCarte.Substring(numeroCarte.Length - 4)}"</span>);<br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<span class="keyword">return true</span>;<br>
+&nbsp;&nbsp;&nbsp;&nbsp;}<br>
+<br>
+&nbsp;&nbsp;&nbsp;&nbsp;<span class="keyword">public string</span> <span class="method">ObtenirNomMethode</span>() => <span class="string">"Carte Bancaire"</span>;<br>
+}<br>
+<br>
+<span class="comment">// Implémentation pour PayPal</span><br>
+<span class="keyword">public class</span> <span class="class-name">PaiementPayPal</span> : <span class="class-name">IMethodePaiement</span><br>
+{<br>
+&nbsp;&nbsp;&nbsp;&nbsp;<span class="keyword">private string</span> email;<br>
+<br>
+&nbsp;&nbsp;&nbsp;&nbsp;<span class="keyword">public</span> <span class="method">PaiementPayPal</span>(<span class="keyword">string</span> email)<br>
+&nbsp;&nbsp;&nbsp;&nbsp;{<br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<span class="keyword">this</span>.email = email;<br>
+&nbsp;&nbsp;&nbsp;&nbsp;}<br>
+<br>
+&nbsp;&nbsp;&nbsp;&nbsp;<span class="keyword">public bool</span> <span class="method">Payer</span>(<span class="keyword">decimal</span> montant)<br>
+&nbsp;&nbsp;&nbsp;&nbsp;{<br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Console.WriteLine(<span class="string">$"💰 Paiement de {montant}€ via PayPal ({email})"</span>);<br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<span class="keyword">return true</span>;<br>
+&nbsp;&nbsp;&nbsp;&nbsp;}<br>
+<br>
+&nbsp;&nbsp;&nbsp;&nbsp;<span class="keyword">public string</span> <span class="method">ObtenirNomMethode</span>() => <span class="string">"PayPal"</span>;<br>
+}<br>
+<br>
+<span class="comment">// Classe qui utilise l'abstraction</span><br>
+<span class="keyword">public class</span> <span class="class-name">ProcesseurPaiement</span><br>
+{<br>
+&nbsp;&nbsp;&nbsp;&nbsp;<span class="comment">// Programmation vers l'interface, pas l'implémentation</span><br>
+&nbsp;&nbsp;&nbsp;&nbsp;<span class="keyword">public void</span> <span class="method">TraiterPaiement</span>(<span class="class-name">IMethodePaiement</span> methode, <span class="keyword">decimal</span> montant)<br>
+&nbsp;&nbsp;&nbsp;&nbsp;{<br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Console.WriteLine(<span class="string">$"Traitement du paiement avec {methode.ObtenirNomMethode()}..."</span>);<br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<span class="keyword">if</span> (methode.Payer(montant))<br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;{<br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Console.WriteLine(<span class="string">"✅ Paiement réussi!"</span>);<br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;}<br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<span class="keyword">else</span><br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;{<br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Console.WriteLine(<span class="string">"❌ Échec du paiement"</span>);<br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;}<br>
+&nbsp;&nbsp;&nbsp;&nbsp;}<br>
+}<br>
+<br>
+<span class="comment">// Utilisation</span><br>
+<span class="class-name">ProcesseurPaiement</span> processeur = <span class="keyword">new</span> <span class="class-name">ProcesseurPaiement</span>();<br>
+<br>
+<span class="class-name">IMethodePaiement</span> carte = <span class="keyword">new</span> <span class="class-name">PaiementCarteBancaire</span>(<span class="string">"1234567812345678"</span>);<br>
+processeur.TraiterPaiement(carte, <span class="number">99.99m</span>);<br>
+<br>
+<span class="class-name">IMethodePaiement</span> paypal = <span class="keyword">new</span> <span class="class-name">PaiementPayPal</span>(<span class="string">"user@email.com"</span>);<br>
+processeur.TraiterPaiement(paypal, <span class="number">49.99m</span>);
+            </div>
+        </div>
+    </div>
+    
+    <script>
+        function demoAbstractClass() {
+            document.getElementById('output').innerHTML = `
+                <h3 style="color: #667eea;">📝 Classe Abstraite - Démonstration</h3>
+                <div class="example-box">
+                    <strong>Concept :</strong><br>
+                    Une classe abstraite fournit une base commune avec du code partagé.
+                    <br><br>
+                    <strong>Exemple :</strong><br>
+                    <code>
+                    abstract class Animal {<br>
+                    &nbsp;&nbsp;public string Nom { get; set; }<br>
+                    &nbsp;&nbsp;public abstract void FaireDuBruit(); // Doit être implémenté<br>
+                    &nbsp;&nbsp;public void Dormir() { } // Déjà implémenté<br>
+                    }<br><br>
+                    class Chien : Animal {<br>
+                    &nbsp;&nbsp;public override void FaireDuBruit() {<br>
+                    &nbsp;&nbsp;&nbsp;&nbsp;Console.WriteLine("Woof!");<br>
+                    &nbsp;&nbsp;}<br>
+                    }
+                    </code>
+                    <br><br>
+                    <strong>Résultat :</strong><br>
+                    🐕 Le chien hérite de <em>Nom</em> et <em>Dormir()</em>, et implémente <em>FaireDuBruit()</em>
+                    <br><br>
+                    <strong>✅ Avantages :</strong> Code commun partagé, structure claire
+                </div>
+            `;
+        }
+        
+        function demoInterface() {
+            document.getElementById('output').innerHTML = `
+                <h3 style="color: #667eea;">🔌 Interface - Démonstration</h3>
+                <div class="example-box">
+                    <strong>Concept :</strong><br>
+                    Une interface définit un contrat que les classes doivent respecter.
+                    <br><br>
+                    <strong>Exemple :</strong><br>
+                    <code>
+                    interface IVolable {<br>
+                    &nbsp;&nbsp;void Decoller();<br>
+                    &nbsp;&nbsp;void Voler();<br>
+                    &nbsp;&nbsp;void Atterrir();<br>
+                    }<br><br>
+                    class Avion : IVolable {<br>
+                    &nbsp;&nbsp;public void Decoller() { ... }<br>
+                    &nbsp;&nbsp;public void Voler() { ... }<br>
+                    &nbsp;&nbsp;public void Atterrir() { ... }<br>
+                    }<br><br>
+                    class Drone : IVolable {<br>
+                    &nbsp;&nbsp;// Implémentation différente<br>
+                    }
+                    </code>
+                    <br><br>
+                    <strong>Résultat :</strong><br>
+                    ✈️ Avion et 🚁 Drone implémentent tous deux IVolable, mais chacun à sa manière
+                    <br><br>
+                    <strong>✅ Avantages :</strong> Flexibilité, contrat clair, implémentation multiple possible
+                </div>
+            `;
+        }
+        
+        function demoPolymorphisme() {
+            document.getElementById('output').innerHTML = `
+                <h3 style="color: #667eea;">🎭 Polymorphisme avec Abstraction</h3>
+                <div class="example-box">
+                    <strong>Concept :</strong><br>
+                    L'abstraction permet le polymorphisme - traiter différents objets de manière uniforme.
+                    <br><br>
+                    <strong>Exemple :</strong><br>
+                    <code>
+                    List&lt;IVolable&gt; objetsVolants = new List&lt;IVolable&gt;<br>
+                    {<br>
+                    &nbsp;&nbsp;new Avion(),<br>
+                    &nbsp;&nbsp;new Drone(),<br>
+                    &nbsp;&nbsp;new Helicopter()<br>
+                    };<br><br>
+                    foreach (IVolable objet in objetsVolants)<br>
+                    {<br>
+                    &nbsp;&nbsp;objet.Decoller();&nbsp;&nbsp;// Appelle la bonne méthode<br>
+                    &nbsp;&nbsp;objet.Voler();<br>
+                    &nbsp;&nbsp;objet.Atterrir();<br>
+                    }
+                    </code>
+                    <br><br>
+                    <strong>Résultat :</strong><br>
+                    ✈️ L'avion décolle...<br>
+                    🚁 Le drone décolle...<br>
+                    🚁 L'hélicoptère décolle...<br>
+                    <em>Chaque objet exécute sa propre implémentation !</em>
+                    <br><br>
+                    <strong>✅ Puissance :</strong> Un seul code pour plusieurs types différents
+                </div>
+            `;
+        }
+        
+        function demoMultipleInterfaces() {
+            document.getElementById('output').innerHTML = `
+                <h3 style="color: #667eea;">🔗 Implémentation d'Interfaces Multiples</h3>
+                <div class="example-box">
+                    <strong>Concept :</strong><br>
+                    Contrairement aux classes (héritage simple), une classe peut implémenter plusieurs interfaces.
+                    <br><br>
+                    <strong>Exemple :</strong><br>
+                    <code>
+                    interface IVolable { void Voler(); }<br>
+                    interface IRechargeableElectriquement { void Recharger(); }<br>
+                    interface IConnecteInternet { void SynchroniserDonnees(); }<br>
+                    <br>
+                    class DroneModerne : IVolable, IRechargeableElectriquement, IConnecteInternet<br>
+                    {<br>
+                    &nbsp;&nbsp;public void Voler() { ... }<br>
+                    &nbsp;&nbsp;public void Recharger() { ... }<br>
+                    &nbsp;&nbsp;public void SynchroniserDonnees() { ... }<br>
+                    }
+                    </code>
+                    <br><br>
+                    <strong>Résultat :</strong><br>
+                    🚁 DroneModerne peut : voler, se recharger ET se connecter à Internet !<br>
+                    <em>C'est impossible avec l'héritage multiple de classes</em>
+                    <br><br>
+                    <strong>✅ Flexibilité :</strong> Combinaison de plusieurs capacités
+                </div>
+            `;
+        }
+        
+        function demoQuandUtiliser() {
+            document.getElementById('output').innerHTML = `
+                <h3 style="color: #667eea;">🤔 Quand utiliser Classe Abstraite vs Interface ?</h3>
+                <div class="example-box">
+                    <strong>📝 Utilisez une CLASSE ABSTRAITE quand :</strong><br>
+                    ✅ Vous avez du code commun à partager<br>
+                    ✅ Les classes sont fortement liées (relation "est-un")<br>
+                    ✅ Vous voulez des champs ou constructeurs<br>
+                    ✅ Exemple : Animal → Chien, Chat, Oiseau<br>
+                    <br>
+                    <strong>🔌 Utilisez une INTERFACE quand :</strong><br>
+                    ✅ Vous définissez une capacité/contrat (relation "peut-faire")<br>
+                    ✅ Vous voulez permettre l'implémentation multiple<br>
+                    ✅ Classes non liées qui partagent un comportement<br>
+                    ✅ Exemple : IVolable → Avion, Drone, Oiseau, Superman<br>
+                    <br>
+                    <strong>💡 Règle d'or :</strong><br>
+                    <em>"Préférez la composition (interfaces) à l'héritage (classes abstraites)"</em><br>
+                    <br>
+                    <strong>🎯 Les deux peuvent coexister :</strong><br>
+                    Une classe peut hériter d'une classe abstraite ET implémenter plusieurs interfaces !<br>
+                    <code>class Drone : Vehicule, IVolable, IRechargeableElectriquement</code>
+                </div>
+            `;
+        }
+    </script>
+</body>
+</html>

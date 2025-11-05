@@ -1,0 +1,786 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Héritage en C# .NET</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+        
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background: linear-gradient(135deg, #fc466b 0%, #3f5efb 100%);
+            padding: 20px;
+            min-height: 100vh;
+        }
+        
+        .container {
+            max-width: 1400px;
+            margin: 0 auto;
+            background: white;
+            border-radius: 20px;
+            padding: 40px;
+            box-shadow: 0 20px 60px rgba(0,0,0,0.3);
+        }
+        
+        h1 {
+            color: #fc466b;
+            text-align: center;
+            margin-bottom: 10px;
+            font-size: 2.5em;
+        }
+        
+        .subtitle {
+            text-align: center;
+            color: #666;
+            margin-bottom: 40px;
+            font-size: 1.1em;
+        }
+        
+        .section {
+            margin-bottom: 40px;
+        }
+        
+        h2 {
+            color: #3f5efb;
+            margin-bottom: 20px;
+            padding-bottom: 10px;
+            border-bottom: 3px solid #fc466b;
+        }
+        
+        .tree-container {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            margin: 40px 0;
+            gap: 20px;
+        }
+        
+        .tree-node {
+            background: linear-gradient(135deg, #fc466b 0%, #3f5efb 100%);
+            color: white;
+            padding: 25px 40px;
+            border-radius: 15px;
+            box-shadow: 0 10px 25px rgba(0,0,0,0.2);
+            min-width: 250px;
+            text-align: center;
+            transition: all 0.3s ease;
+            cursor: pointer;
+        }
+        
+        .tree-node:hover {
+            transform: scale(1.05);
+            box-shadow: 0 15px 35px rgba(0,0,0,0.3);
+        }
+        
+        .tree-node.base {
+            background: linear-gradient(135deg, #f093fb 0%, #f5576c 100%);
+            font-size: 1.2em;
+        }
+        
+        .tree-node h3 {
+            font-size: 1.6em;
+            margin-bottom: 10px;
+        }
+        
+        .tree-node p {
+            font-size: 0.9em;
+            opacity: 0.9;
+        }
+        
+        .arrow {
+            font-size: 3em;
+            color: #fc466b;
+            font-weight: bold;
+        }
+        
+        .children-row {
+            display: flex;
+            gap: 20px;
+            flex-wrap: wrap;
+            justify-content: center;
+        }
+        
+        .code-block {
+            background: #282c34;
+            color: #abb2bf;
+            padding: 20px;
+            border-radius: 10px;
+            overflow-x: auto;
+            margin: 20px 0;
+            font-family: 'Courier New', monospace;
+            font-size: 0.95em;
+            line-height: 1.6;
+        }
+        
+        .keyword {
+            color: #c678dd;
+        }
+        
+        .class-name {
+            color: #e5c07b;
+        }
+        
+        .method {
+            color: #61afef;
+        }
+        
+        .string {
+            color: #98c379;
+        }
+        
+        .comment {
+            color: #5c6370;
+            font-style: italic;
+        }
+        
+        .number {
+            color: #d19a66;
+        }
+        
+        .concepts-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+            gap: 25px;
+            margin: 30px 0;
+        }
+        
+        .concept-card {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: white;
+            padding: 25px;
+            border-radius: 15px;
+            box-shadow: 0 10px 25px rgba(0,0,0,0.2);
+            transition: all 0.3s ease;
+        }
+        
+        .concept-card:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 15px 35px rgba(0,0,0,0.3);
+        }
+        
+        .concept-card h3 {
+            font-size: 1.5em;
+            margin-bottom: 15px;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+        
+        .concept-card.virtual {
+            background: linear-gradient(135deg, #11998e 0%, #38ef7d 100%);
+        }
+        
+        .concept-card.abstract {
+            background: linear-gradient(135deg, #eb3349 0%, #f45c43 100%);
+        }
+        
+        .concept-card.sealed {
+            background: linear-gradient(135deg, #4facfe 0%, #00f2fe 100%);
+        }
+        
+        .concept-card.base-keyword {
+            background: linear-gradient(135deg, #fa709a 0%, #fee140 100%);
+        }
+        
+        .interactive-section {
+            background: #f8f9fa;
+            padding: 30px;
+            border-radius: 15px;
+            margin: 30px 0;
+        }
+        
+        .demo-buttons {
+            display: flex;
+            gap: 15px;
+            margin: 20px 0;
+            flex-wrap: wrap;
+        }
+        
+        button {
+            background: linear-gradient(135deg, #fc466b 0%, #3f5efb 100%);
+            color: white;
+            border: none;
+            padding: 15px 30px;
+            border-radius: 10px;
+            cursor: pointer;
+            font-size: 1em;
+            transition: all 0.3s ease;
+            box-shadow: 0 4px 10px rgba(0,0,0,0.2);
+        }
+        
+        button:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 6px 15px rgba(0,0,0,0.3);
+        }
+        
+        .output {
+            background: white;
+            padding: 20px;
+            border-radius: 10px;
+            margin-top: 20px;
+            min-height: 100px;
+            border-left: 5px solid #fc466b;
+            font-family: monospace;
+        }
+        
+        .tip {
+            background: #fff3cd;
+            color: #856404;
+            padding: 20px;
+            border-radius: 10px;
+            margin: 20px 0;
+            border-left: 5px solid #ffc107;
+        }
+        
+        .tip h4 {
+            margin-bottom: 10px;
+            color: #856404;
+        }
+        
+        .advantage {
+            background: #e8f5e9;
+            padding: 15px;
+            border-radius: 10px;
+            margin: 10px 0;
+            border-left: 5px solid #4caf50;
+        }
+        
+        .advantage h4 {
+            color: #2e7d32;
+            margin-bottom: 5px;
+        }
+        
+        .comparison-table {
+            background: #f8f9fa;
+            border-radius: 15px;
+            padding: 30px;
+            margin: 30px 0;
+            overflow-x: auto;
+        }
+        
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            background: white;
+            border-radius: 10px;
+            overflow: hidden;
+        }
+        
+        th {
+            background: linear-gradient(135deg, #fc466b 0%, #3f5efb 100%);
+            color: white;
+            padding: 15px;
+            text-align: left;
+            font-size: 1.1em;
+        }
+        
+        td {
+            padding: 15px;
+            border-bottom: 1px solid #eee;
+        }
+        
+        tr:hover {
+            background: #f8f9fa;
+        }
+        
+        @media (max-width: 768px) {
+            .concepts-grid {
+                grid-template-columns: 1fr;
+            }
+            .children-row {
+                flex-direction: column;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h1>🧬 Héritage en C# .NET</h1>
+        <p class="subtitle">Réutiliser et étendre les fonctionnalités des classes</p>
+        
+        <div class="section">
+            <h2>📚 Qu'est-ce que l'Héritage ?</h2>
+            <p>L'héritage est un mécanisme qui permet à une classe (classe dérivée ou enfant) d'hériter des propriétés et méthodes d'une autre classe (classe de base ou parent). C'est comme un arbre généalogique : les enfants héritent des caractéristiques de leurs parents !</p>
+        </div>
+        
+        <div class="section">
+            <h2>🌳 Hiérarchie d'Héritage</h2>
+            <div class="tree-container">
+                <div class="tree-node base" onclick="showNodeInfo('Animal')">
+                    <h3>🦁 Animal</h3>
+                    <p>Classe de base</p>
+                </div>
+                <div class="arrow">↓</div>
+                <div class="children-row">
+                    <div class="tree-node" onclick="showNodeInfo('Mammifere')">
+                        <h3>🐾 Mammifère</h3>
+                        <p>Hérite d'Animal</p>
+                    </div>
+                    <div class="tree-node" onclick="showNodeInfo('Oiseau')">
+                        <h3>🦅 Oiseau</h3>
+                        <p>Hérite d'Animal</p>
+                    </div>
+                    <div class="tree-node" onclick="showNodeInfo('Poisson')">
+                        <h3>🐟 Poisson</h3>
+                        <p>Hérite d'Animal</p>
+                    </div>
+                </div>
+                <div class="arrow">↓</div>
+                <div class="children-row">
+                    <div class="tree-node" onclick="showNodeInfo('Chien')">
+                        <h3>🐕 Chien</h3>
+                        <p>Hérite de Mammifère</p>
+                    </div>
+                    <div class="tree-node" onclick="showNodeInfo('Chat')">
+                        <h3>🐱 Chat</h3>
+                        <p>Hérite de Mammifère</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+        
+        <div class="section">
+            <h2>💻 Exemple de Code</h2>
+            <div class="code-block">
+<span class="comment">// Classe de base</span><br>
+<span class="keyword">public class</span> <span class="class-name">Animal</span><br>
+{<br>
+&nbsp;&nbsp;&nbsp;&nbsp;<span class="keyword">public string</span> Nom { <span class="keyword">get</span>; <span class="keyword">set</span>; }<br>
+&nbsp;&nbsp;&nbsp;&nbsp;<span class="keyword">public int</span> Age { <span class="keyword">get</span>; <span class="keyword">set</span>; }<br>
+<br>
+&nbsp;&nbsp;&nbsp;&nbsp;<span class="keyword">public virtual void</span> <span class="method">FaireDuBruit</span>()<br>
+&nbsp;&nbsp;&nbsp;&nbsp;{<br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Console.WriteLine(<span class="string">"L'animal fait un bruit"</span>);<br>
+&nbsp;&nbsp;&nbsp;&nbsp;}<br>
+<br>
+&nbsp;&nbsp;&nbsp;&nbsp;<span class="keyword">public abstract void</span> <span class="method">FaireDuBruit</span>()<br>
+&nbsp;&nbsp;&nbsp;&nbsp;{<br>
+&nbsp;&nbsp;&nbsp;&nbsp;}<br>
+<br>
+&nbsp;&nbsp;&nbsp;&nbsp;<span class="keyword">public void</span> <span class="method">Dormir</span>()<br>
+&nbsp;&nbsp;&nbsp;&nbsp;{<br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Console.WriteLine(<span class="string">$"{Nom} dort... 💤"</span>);<br>
+&nbsp;&nbsp;&nbsp;&nbsp;}<br>
+}<br>
+<br>
+<span class="comment">// Classe dérivée</span><br>
+<span class="keyword">public class</span> <span class="class-name">Chien</span> : <span class="class-name">Animal</span><br>
+{<br>
+&nbsp;&nbsp;&nbsp;&nbsp;<span class="keyword">public string</span> Race { <span class="keyword">get</span>; <span class="keyword">set</span>; }<br>
+<br>
+&nbsp;&nbsp;&nbsp;&nbsp;<span class="comment">// Surcharge de méthode (override)</span><br>
+&nbsp;&nbsp;&nbsp;&nbsp;<span class="keyword">public override void</span> <span class="method">FaireDuBruit</span>()<br>
+&nbsp;&nbsp;&nbsp;&nbsp;{<br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Console.WriteLine(<span class="string">"🐕 Woof! Woof!"</span>);<br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;base.FaireDuBruit();<br>
+&nbsp;&nbsp;&nbsp;&nbsp;}<br>
+<br>
+&nbsp;&nbsp;&nbsp;&nbsp;<span class="keyword">public void new</span> <span class="method">Dormir</span>()<br>
+&nbsp;&nbsp;&nbsp;&nbsp;{<br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Console.WriteLine(<span class="string">$"{Nom} dort... 💤"</span>);<br>
+&nbsp;&nbsp;&nbsp;&nbsp;}<br>
+<br>
+&nbsp;&nbsp;&nbsp;&nbsp;<span class="comment">// Nouvelle méthode spécifique au chien</span><br>
+&nbsp;&nbsp;&nbsp;&nbsp;<span class="keyword">public void</span> <span class="method">Jouer</span>()<br>
+&nbsp;&nbsp;&nbsp;&nbsp;{<br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Console.WriteLine(<span class="string">$"{Nom} joue avec une balle ! 🎾"</span>);<br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Console.WriteLine(<span class="string"></span>$"{Nom} qui a {Age} ans et qui est de race {Race} joue avec une balle ! 🎾"</span>));<br>
+
+
+
+&nbsp;&nbsp;&nbsp;&nbsp;}<br>
+}<br>
+<br>
+<span class="comment">// Utilisation</span><br>
+<span class="class-name">Chien</span> monChien = <span class="keyword">new</span> <span class="class-name">Chien</span><br>
+{<br>
+&nbsp;&nbsp;&nbsp;&nbsp;Nom = <span class="string">"Rex"</span>,<br>
+&nbsp;&nbsp;&nbsp;&nbsp;Age = <span class="number">3</span>,<br>
+&nbsp;&nbsp;&nbsp;&nbsp;Race = <span class="string">"Labrador"</span><br>
+};<br>
+<br>
+monChien.FaireDuBruit();&nbsp;&nbsp;<span class="comment">// 🐕 Woof! Woof!</span><br>
+monChien.Dormir();&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<span class="comment">// Rex dort... 💤 (héritée d'Animal)</span><br>
+monChien.Jouer();&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<span class="comment">// Rex joue avec une balle ! 🎾</span>
+            </div>
+        </div>
+        
+        <div class="section">
+            <h2>🔑 Concepts Clés</h2>
+            <div class="concepts-grid">
+                <div class="concept-card virtual">
+                    <h3>🔄 virtual</h3>
+                    <p>Permet à une méthode d'être surchargée dans les classes dérivées.</p>
+                    <div style="margin-top: 15px; background: rgba(255,255,255,0.2); padding: 10px; border-radius: 8px;">
+                        <code>public virtual void Methode() { }</code>
+                    </div>
+                </div>
+                
+                <div class="concept-card">
+                    <h3>✏️ override</h3>
+                    <p>Permet de remplacer une méthode virtuelle de la classe de base.</p>
+                    <div style="margin-top: 15px; background: rgba(255,255,255,0.2); padding: 10px; border-radius: 8px;">
+                        <code>public override void Methode() { }</code>
+                    </div>
+                </div>
+                
+                <div class="concept-card abstract">
+                    <h3>🎨 abstract</h3>
+                    <p>Définit une classe ou méthode qui doit être implémentée dans les classes dérivées.</p>
+                    <div style="margin-top: 15px; background: rgba(255,255,255,0.2); padding: 10px; border-radius: 8px;">
+                        <code>public abstract void Methode();</code>
+                    </div>
+                </div>
+                
+                <div class="concept-card sealed">
+                    <h3>🔒 sealed</h3>
+                    <p>Empêche une classe d'être héritée ou une méthode d'être surchargée.</p>
+                    <div style="margin-top: 15px; background: rgba(255,255,255,0.2); padding: 10px; border-radius: 8px;">
+                        <code>public sealed class MaClasse { }</code>
+                    </div>
+                </div>
+                
+                <div class="concept-card base-keyword">
+                    <h3>⬆️ base</h3>
+                    <p>Permet d'accéder aux membres de la classe de base.</p>
+                    <div style="margin-top: 15px; background: rgba(255,255,255,0.2); padding: 10px; border-radius: 8px;">
+                        <code>base.Methode();</code>
+                    </div>
+                </div>
+                
+                <div class="concept-card">
+                    <h3>🆕 new</h3>
+                    <p>Cache un membre de la classe de base au lieu de le surcharger.</p>
+                    <div style="margin-top: 15px; background: rgba(255,255,255,0.2); padding: 10px; border-radius: 8px;">
+                        <code>public new void Methode() { }</code>
+                    </div>
+                </div>
+            </div>
+        </div>
+        
+        <div class="section">
+            <h2>📊 Comparaison des Mots-clés</h2>
+            <div class="comparison-table">
+                <table>
+                    <thead>
+                        <tr>
+                            <th>Mot-clé</th>
+                            <th>Utilisation</th>
+                            <th>Peut être surchargé ?</th>
+                            <th>Doit être implémenté ?</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr>
+                            <td><strong>virtual</strong></td>
+                            <td>Méthode de base avec implémentation</td>
+                            <td style="color: #27ae60;">✓ Oui (override)</td>
+                            <td style="color: #e74c3c;">✗ Non</td>
+                        </tr>
+                        <tr>
+                            <td><strong>abstract</strong></td>
+                            <td>Méthode sans implémentation</td>
+                            <td style="color: #27ae60;">✓ Oui (override obligatoire)</td>
+                            <td style="color: #27ae60;">✓ Oui</td>
+                        </tr>
+                        <tr>
+                            <td><strong>sealed</strong></td>
+                            <td>Empêcher l'héritage/surcharge</td>
+                            <td style="color: #e74c3c;">✗ Non</td>
+                            <td style="color: #e74c3c;">✗ Non</td>
+                        </tr>
+                        <tr>
+                            <td><strong>override</strong></td>
+                            <td>Remplacer une méthode virtuelle</td>
+                            <td style="color: #27ae60;">✓ Oui (si pas sealed)</td>
+                            <td style="color: #27ae60;">✓ Si abstract</td>
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
+        </div>
+        
+        <div class="section">
+            <h2>💻 Classes Abstraites</h2>
+            <div class="code-block">
+<span class="comment">// Classe abstraite - ne peut pas être instanciée directement</span><br>
+<span class="keyword">public abstract class</span> <span class="class-name">Forme</span><br>
+{<br>
+&nbsp;&nbsp;&nbsp;&nbsp;<span class="keyword">public string</span> Couleur { <span class="keyword">get</span>; <span class="keyword">set</span>; }<br>
+<br>
+&nbsp;&nbsp;&nbsp;&nbsp;<span class="comment">// Méthode abstraite - doit être implémentée</span><br>
+&nbsp;&nbsp;&nbsp;&nbsp;<span class="keyword">public abstract double</span> <span class="method">CalculerAire</span>();<br>
+<br>
+&nbsp;&nbsp;&nbsp;&nbsp;<span class="comment">// Méthode normale - optionnelle à surcharger</span><br>
+&nbsp;&nbsp;&nbsp;&nbsp;<span class="keyword">public virtual void</span> <span class="method">Afficher</span>()<br>
+&nbsp;&nbsp;&nbsp;&nbsp;{<br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Console.WriteLine(<span class="string">$"Forme de couleur {Couleur}"</span>);<br>
+&nbsp;&nbsp;&nbsp;&nbsp;}<br>
+}<br>
+<br>
+<span class="keyword">public class</span> <span class="class-name">Cercle</span> : <span class="class-name">Forme</span><br>
+{<br>
+&nbsp;&nbsp;&nbsp;&nbsp;<span class="keyword">public double</span> Rayon { <span class="keyword">get</span>; <span class="keyword">set</span>; }<br>
+<br>
+&nbsp;&nbsp;&nbsp;&nbsp;<span class="comment">// Implémentation obligatoire de la méthode abstraite</span><br>
+&nbsp;&nbsp;&nbsp;&nbsp;<span class="keyword">public override double</span> <span class="method">CalculerAire</span>()<br>
+&nbsp;&nbsp;&nbsp;&nbsp;{<br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<span class="keyword">return</span> Math.PI * Rayon * Rayon;<br>
+&nbsp;&nbsp;&nbsp;&nbsp;}<br>
+}<br>
+<br>
+<span class="comment">// ❌ Erreur : impossible d'instancier une classe abstraite</span><br>
+<span class="comment">// Forme f = new Forme(); // ERREUR !</span><br>
+<br>
+<span class="comment">// ✓ OK : instanciation d'une classe concrète</span><br>
+<span class="class-name">Cercle</span> c = <span class="keyword">new</span> <span class="class-name">Cercle</span> { Rayon = <span class="number">5</span>, Couleur = <span class="string">"Rouge"</span> };<br>
+Console.WriteLine(c.CalculerAire());&nbsp;&nbsp;<span class="comment">// 78.54...</span>
+            </div>
+        </div>
+        
+        <div class="section">
+            <h2>🎮 Démonstration Interactive</h2>
+            <div class="interactive-section">
+                <p>Explorez différents scénarios d'héritage :</p>
+                <div class="demo-buttons">
+                    <button onclick="demo1()">Héritage simple</button>
+                    <button onclick="demo2()">Surcharge (override)</button>
+                    <button onclick="demo3()">Mot-clé base</button>
+                    <button onclick="demo4()">Classe abstraite</button>
+                    <button onclick="demo5()">Sealed</button>
+                </div>
+                <div class="output" id="output">
+                    Cliquez sur un bouton pour voir la démonstration...
+                </div>
+            </div>
+        </div>
+        
+        <div class="section">
+            <h2>✨ Avantages de l'Héritage</h2>
+            <div class="advantage">
+                <h4>♻️ Réutilisabilité du code</h4>
+                <p>Évitez la duplication en réutilisant le code de la classe de base.</p>
+            </div>
+            <div class="advantage">
+                <h4>🎯 Spécialisation</h4>
+                <p>Créez des classes spécialisées qui étendent les fonctionnalités de base.</p>
+            </div>
+            <div class="advantage">
+                <h4>📦 Organisation</h4>
+                <p>Structurez votre code de manière hiérarchique et logique.</p>
+            </div>
+            <div class="advantage">
+                <h4>🔄 Polymorphisme</h4>
+                <p>Traitez des objets de différentes classes via leur classe de base commune.</p>
+            </div>
+        </div>
+        
+        <div class="section">
+            <h2>💡 Bonnes Pratiques</h2>
+            <div class="tip">
+                <h4>🎯 Préférez la composition à l'héritage</h4>
+                <p>L'héritage crée un couplage fort. Utilisez-le quand il y a une vraie relation "est un" (un Chien EST UN Animal).</p>
+            </div>
+            <div class="tip">
+                <h4>🔒 Utilisez sealed quand approprié</h4>
+                <p>Si une classe n'est pas conçue pour être héritée, marquez-la sealed pour éviter des problèmes futurs.</p>
+            </div>
+            <div class="tip">
+                <h4>📝 Classes abstraites vs Interfaces</h4>
+                <p>Utilisez des classes abstraites quand vous avez une implémentation commune. Utilisez des interfaces pour définir des contrats.</p>
+            </div>
+            <div class="tip">
+                <h4>⚠️ Attention à la hiérarchie</h4>
+                <p>Évitez les hiérarchies trop profondes (plus de 3-4 niveaux). Elles deviennent difficiles à maintenir.</p>
+            </div>
+        </div>
+    </div>
+    
+    <script>
+        function showNodeInfo(nodeType) {
+            const info = {
+                'Animal': {
+                    title: '🦁 Animal - Classe de Base',
+                    desc: 'C\'est la classe racine de notre hiérarchie. Elle contient les propriétés et méthodes communes à tous les animaux.',
+                    members: 'Propriétés : Nom, Age<br>Méthodes : FaireDuBruit(), Dormir()'
+                },
+                'Mammifere': {
+                    title: '🐾 Mammifère - Classe Intermédiaire',
+                    desc: 'Hérite d\'Animal et ajoute des caractéristiques spécifiques aux mammifères.',
+                    members: 'Hérite tout d\'Animal<br>Ajoute : TypePoil, Allaiter()'
+                },
+                'Oiseau': {
+                    title: '🦅 Oiseau - Classe Dérivée',
+                    desc: 'Hérite d\'Animal et spécialise le comportement pour les oiseaux.',
+                    members: 'Hérite tout d\'Animal<br>Ajoute : EnvergureAiles, Voler()'
+                },
+                'Poisson': {
+                    title: '🐟 Poisson - Classe Dérivée',
+                    desc: 'Hérite d\'Animal et spécialise le comportement pour les poissons.',
+                    members: 'Hérite tout d\'Animal<br>Ajoute : TypeNageoire, Nager()'
+                },
+                'Chien': {
+                    title: '🐕 Chien - Classe Spécialisée',
+                    desc: 'Hérite de Mammifère (qui hérite d\'Animal). Très spécialisé.',
+                    members: 'Hérite tout d\'Animal et Mammifère<br>Ajoute : Race, Jouer()'
+                },
+                'Chat': {
+                    title: '🐱 Chat - Classe Spécialisée',
+                    desc: 'Hérite de Mammifère (qui hérite d\'Animal). Très spécialisé.',
+                    members: 'Hérite tout d\'Animal et Mammifère<br>Ajoute : Ronronner(), Griffer()'
+                }
+            };
+            
+            const nodeInfo = info[nodeType];
+            document.getElementById('output').innerHTML = `
+                <h3 style="color: #fc466b; margin-bottom: 15px;">${nodeInfo.title}</h3>
+                <p style="margin-bottom: 15px;"><strong>Description :</strong> ${nodeInfo.desc}</p>
+                <p><strong>Membres :</strong><br>${nodeInfo.members}</p>
+            `;
+        }
+        
+        function demo1() {
+            document.getElementById('output').innerHTML = `
+                <h3 style="color: #fc466b;">🌟 Héritage Simple</h3>
+                <p style="margin: 15px 0;">Une classe dérivée hérite automatiquement de tous les membres publics et protégés de sa classe de base.</p>
+                <div style="background: #f8f9fa; padding: 15px; border-radius: 8px; margin: 15px 0;">
+                    <code style="display: block; line-height: 1.8;">
+                        Chien rex = new Chien();<br>
+                        rex.Nom = "Rex"; // ✓ Hérité d'Animal<br>
+                        rex.Age = 3; // ✓ Hérité d'Animal<br>
+                        rex.Dormir(); // ✓ Hérité d'Animal<br>
+                        rex.Jouer(); // ✓ Défini dans Chien
+                    </code>
+                </div>
+                <p style="color: #27ae60; font-weight: bold;">✅ Le Chien peut utiliser tous les membres d'Animal sans les redéfinir !</p>
+            `;
+        }
+        
+        function demo2() {
+            document.getElementById('output').innerHTML = `
+                <h3 style="color: #3f5efb;">✏️ Surcharge avec override</h3>
+                <p style="margin: 15px 0;">Le mot-clé <strong>override</strong> permet de remplacer l'implémentation d'une méthode virtuelle de la classe de base.</p>
+                <div style="background: #f8f9fa; padding: 15px; border-radius: 8px; margin: 15px 0;">
+                    <code style="display: block; line-height: 1.8;">
+                        <span style="color: #666;">// Dans Animal :</span><br>
+                        public virtual void FaireDuBruit() { ... }<br>
+                        <br>
+                        <span style="color: #666;">// Dans Chien :</span><br>
+                        public override void FaireDuBruit()<br>
+                        {<br>
+                        &nbsp;&nbsp;Console.WriteLine("🐕 Woof!");<br>
+                        }<br>
+                        <br>
+                        <span style="color: #666;">// Utilisation :</span><br>
+                        Animal animal = new Chien();<br>
+                        animal.FaireDuBruit(); // Affiche "🐕 Woof!"
+                    </code>
+                </div>
+                <p style="color: #27ae60; font-weight: bold;">✅ Même référencé comme Animal, l'objet exécute la méthode du Chien !</p>
+            `;
+        }
+        
+        function demo3() {
+            document.getElementById('output').innerHTML = `
+                <h3 style="color: #fa709a;">⬆️ Utilisation du mot-clé base</h3>
+                <p style="margin: 15px 0;">Le mot-clé <strong>base</strong> permet d'accéder aux membres de la classe de base depuis la classe dérivée.</p>
+                <div style="background: #f8f9fa; padding: 15px; border-radius: 8px; margin: 15px 0;">
+                    <code style="display: block; line-height: 1.8;">
+                        public class Chien : Animal<br>
+                        {<br>
+                        &nbsp;&nbsp;public override void FaireDuBruit()<br>
+                        &nbsp;&nbsp;{<br>
+                        &nbsp;&nbsp;&nbsp;&nbsp;<span style="color: #666;">// Appeler la méthode de base</span><br>
+                        &nbsp;&nbsp;&nbsp;&nbsp;base.FaireDuBruit();<br>
+                        &nbsp;&nbsp;&nbsp;&nbsp;<span style="color: #666;">// Puis ajouter le comportement spécifique</span><br>
+                        &nbsp;&nbsp;&nbsp;&nbsp;Console.WriteLine("🐕 Woof!");<br>
+                        &nbsp;&nbsp;}<br>
+                        &nbsp;&nbsp;<br>
+                        &nbsp;&nbsp;<span style="color: #666;">// Constructeur appelant le constructeur de base</span><br>
+                        &nbsp;&nbsp;public Chien(string nom) : base()<br>
+                        &nbsp;&nbsp;{<br>
+                        &nbsp;&nbsp;&nbsp;&nbsp;base.Nom = nom;<br>
+                        &nbsp;&nbsp;}<br>
+                        }
+                    </code>
+                </div>
+                <p style="color: #27ae60; font-weight: bold;">✅ Utilisez base pour réutiliser le code parent et l'étendre !</p>
+            `;
+        }
+        
+        function demo4() {
+            document.getElementById('output').innerHTML = `
+                <h3 style="color: #eb3349;">🎨 Classe Abstraite</h3>
+                <p style="margin: 15px 0;">Une classe abstraite ne peut pas être instanciée directement. Elle sert de modèle pour les classes dérivées.</p>
+                <div style="background: #f8f9fa; padding: 15px; border-radius: 8px; margin: 15px 0;">
+                    <code style="display: block; line-height: 1.8;">
+                        public abstract class Forme<br>
+                        {<br>
+                        &nbsp;&nbsp;<span style="color: #666;">// Méthode abstraite - DOIT être implémentée</span><br>
+                        &nbsp;&nbsp;public abstract double CalculerAire();<br>
+                        &nbsp;&nbsp;<br>
+                        &nbsp;&nbsp;<span style="color: #666;">// Méthode normale - optionnelle</span><br>
+                        &nbsp;&nbsp;public virtual void Afficher() { ... }<br>
+                        }<br>
+                        <br>
+                        <span style="color: #666;">// ❌ IMPOSSIBLE :</span><br>
+                        <span style="color: #e74c3c;">Forme f = new Forme(); // ERREUR !</span><br>
+                        <br>
+                        <span style="color: #666;">// ✓ CORRECT :</span><br>
+                        public class Cercle : Forme<br>
+                        {<br>
+                        &nbsp;&nbsp;public override double CalculerAire()<br>
+                        &nbsp;&nbsp;{<br>
+                        &nbsp;&nbsp;&nbsp;&nbsp;return Math.PI * Rayon * Rayon;<br>
+                        &nbsp;&nbsp;}<br>
+                        }
+                    </code>
+                </div>
+                <p style="color: #27ae60; font-weight: bold;">✅ Les classes abstraites définissent un contrat que les dérivées doivent respecter !</p>
+            `;
+        }
+        
+        function demo5() {
+            document.getElementById('output').innerHTML = `
+                <h3 style="color: #4facfe;">🔒 Classe ou Méthode Sealed</h3>
+                <p style="margin: 15px 0;">Le mot-clé <strong>sealed</strong> empêche une classe d'être héritée ou une méthode d'être surchargée.</p>
+                <div style="background: #f8f9fa; padding: 15px; border-radius: 8px; margin: 15px 0;">
+                    <code style="display: block; line-height: 1.8;">
+                        <span style="color: #666;">// Classe sealed - ne peut pas être héritée</span><br>
+                        public sealed class ChienDressé : Chien<br>
+                        {<br>
+                        &nbsp;&nbsp;public void ObéirAuxOrdres() { ... }<br>
+                        }<br>
+                        <br>
+                        <span style="color: #666;">// ❌ IMPOSSIBLE :</span><br>
+                        <span style="color: #e74c3c;">public class SuperChien : ChienDressé { } // ERREUR !</span><br>
+                        <br>
+                        <span style="color: #666;">// Méthode sealed - ne peut plus être surchargée</span><br>
+                        public class Animal<br>
+                        {<br>
+                        &nbsp;&nbsp;public virtual void Bouger() { ... }<br>
+                        }<br>
+                        <br>
+                        public class Mammifere : Animal<br>
+                        {<br>
+                        &nbsp;&nbsp;public sealed override void Bouger() { ... }<br>
+                        }<br>
+                        <br>
+                        public class Chien : Mammifere<br>
+                        {<br>
+                        &nbsp;&nbsp;<span style="color: #e74c3c;">// ❌ IMPOSSIBLE - Bouger est sealed</span><br>
+                        &nbsp;&nbsp;<span style="color: #e74c3c;">// public override void Bouger() { ... }</span><br>
+                        }
+                    </code>
+                </div>
+                <p style="color: #27ae60; font-weight: bold;">✅ Utilisez sealed pour des raisons de performance ou pour finaliser une implémentation !</p>
+            `;
+        }
+    </script>
+</body>
+</html>

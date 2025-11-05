@@ -1,0 +1,592 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Modificateurs d'accès en C# .NET</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+        
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background: linear-gradient(135deg, #2c3e50 0%, #3498db 100%);
+            padding: 20px;
+            min-height: 100vh;
+        }
+        
+        .container {
+            max-width: 1400px;
+            margin: 0 auto;
+            background: white;
+            border-radius: 20px;
+            padding: 40px;
+            box-shadow: 0 20px 60px rgba(0,0,0,0.3);
+        }
+        
+        h1 {
+            color: #2c3e50;
+            text-align: center;
+            margin-bottom: 10px;
+            font-size: 2.5em;
+        }
+        
+        .subtitle {
+            text-align: center;
+            color: #666;
+            margin-bottom: 40px;
+            font-size: 1.1em;
+        }
+        
+        .section {
+            margin-bottom: 40px;
+        }
+        
+        h2 {
+            color: #3498db;
+            margin-bottom: 20px;
+            padding-bottom: 10px;
+            border-bottom: 3px solid #2c3e50;
+        }
+        
+        .modifiers-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+            gap: 25px;
+            margin: 30px 0;
+        }
+        
+        .modifier-card {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            border-radius: 15px;
+            padding: 25px;
+            color: white;
+            box-shadow: 0 10px 25px rgba(0,0,0,0.2);
+            transition: all 0.3s ease;
+            cursor: pointer;
+        }
+        
+        .modifier-card:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 15px 35px rgba(0,0,0,0.3);
+        }
+        
+        .modifier-card.public {
+            background: linear-gradient(135deg, #11998e 0%, #38ef7d 100%);
+        }
+        
+        .modifier-card.private {
+            background: linear-gradient(135deg, #eb3349 0%, #f45c43 100%);
+        }
+        
+        .modifier-card.protected {
+            background: linear-gradient(135deg, #f093fb 0%, #f5576c 100%);
+        }
+        
+        .modifier-card.internal {
+            background: linear-gradient(135deg, #4facfe 0%, #00f2fe 100%);
+        }
+        
+        .modifier-card.protected-internal {
+            background: linear-gradient(135deg, #fa709a 0%, #fee140 100%);
+        }
+        
+        .modifier-card.private-protected {
+            background: linear-gradient(135deg, #30cfd0 0%, #330867 100%);
+        }
+        
+        .modifier-card h3 {
+            font-size: 1.8em;
+            margin-bottom: 15px;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+        
+        .icon {
+            font-size: 1.5em;
+        }
+        
+        .modifier-card p {
+            margin: 10px 0;
+            line-height: 1.6;
+        }
+        
+        .access-level {
+            background: rgba(255,255,255,0.2);
+            padding: 10px;
+            border-radius: 8px;
+            margin-top: 15px;
+            font-size: 0.9em;
+        }
+        
+        .comparison-table {
+            background: #f8f9fa;
+            border-radius: 15px;
+            padding: 30px;
+            margin: 30px 0;
+            overflow-x: auto;
+        }
+        
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            background: white;
+            border-radius: 10px;
+            overflow: hidden;
+        }
+        
+        th {
+            background: linear-gradient(135deg, #2c3e50 0%, #3498db 100%);
+            color: white;
+            padding: 15px;
+            text-align: left;
+            font-size: 1.1em;
+        }
+        
+        td {
+            padding: 15px;
+            border-bottom: 1px solid #eee;
+        }
+        
+        tr:hover {
+            background: #f8f9fa;
+        }
+        
+        .check {
+            color: #27ae60;
+            font-size: 1.5em;
+            font-weight: bold;
+        }
+        
+        .cross {
+            color: #e74c3c;
+            font-size: 1.5em;
+            font-weight: bold;
+        }
+        
+        .code-block {
+            background: #282c34;
+            color: #abb2bf;
+            padding: 20px;
+            border-radius: 10px;
+            overflow-x: auto;
+            margin: 20px 0;
+            font-family: 'Courier New', monospace;
+            font-size: 0.95em;
+            line-height: 1.6;
+        }
+        
+        .keyword {
+            color: #c678dd;
+        }
+        
+        .class-name {
+            color: #e5c07b;
+        }
+        
+        .method {
+            color: #61afef;
+        }
+        
+        .string {
+            color: #98c379;
+        }
+        
+        .comment {
+            color: #5c6370;
+            font-style: italic;
+        }
+        
+        .interactive-section {
+            background: #f8f9fa;
+            padding: 30px;
+            border-radius: 15px;
+            margin: 30px 0;
+        }
+        
+        .scenario-buttons {
+            display: flex;
+            gap: 15px;
+            margin: 20px 0;
+            flex-wrap: wrap;
+        }
+        
+        button {
+            background: linear-gradient(135deg, #2c3e50 0%, #3498db 100%);
+            color: white;
+            border: none;
+            padding: 15px 30px;
+            border-radius: 10px;
+            cursor: pointer;
+            font-size: 1em;
+            transition: all 0.3s ease;
+            box-shadow: 0 4px 10px rgba(0,0,0,0.2);
+        }
+        
+        button:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 6px 15px rgba(0,0,0,0.3);
+        }
+        
+        .output {
+            background: white;
+            padding: 20px;
+            border-radius: 10px;
+            margin-top: 20px;
+            min-height: 100px;
+            border-left: 5px solid #3498db;
+        }
+        
+        .tip {
+            background: #fff3cd;
+            color: #856404;
+            padding: 20px;
+            border-radius: 10px;
+            margin: 20px 0;
+            border-left: 5px solid #ffc107;
+        }
+        
+        .tip h4 {
+            margin-bottom: 10px;
+            color: #856404;
+        }
+        
+        @media (max-width: 768px) {
+            .modifiers-grid {
+                grid-template-columns: 1fr;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h1>🔐 Modificateurs d'accès en C# .NET</h1>
+        <p class="subtitle">Comprendre et maîtriser les niveaux de visibilité</p>
+        
+        <div class="section">
+            <h2>📚 Les 6 Modificateurs d'accès</h2>
+            <div class="modifiers-grid">
+                <div class="modifier-card public" onclick="showDetails('public')">
+                    <h3><span class="icon">🌍</span> public</h3>
+                    <p>Accessible de <strong>partout</strong></p>
+                    <div class="access-level">
+                        ✅ Même classe<br>
+                        ✅ Classes dérivées<br>
+                        ✅ Même assembly<br>
+                        ✅ Autres assemblies
+                    </div>
+                </div>
+                
+                <div class="modifier-card private" onclick="showDetails('private')">
+                    <h3><span class="icon">🔒</span> private</h3>
+                    <p>Accessible <strong>uniquement dans la classe</strong></p>
+                    <div class="access-level">
+                        ✅ Même classe<br>
+                        ❌ Classes dérivées<br>
+                        ❌ Même assembly<br>
+                        ❌ Autres assemblies
+                    </div>
+                </div>
+                
+                <div class="modifier-card protected" onclick="showDetails('protected')">
+                    <h3><span class="icon">👨‍👩‍👧</span> protected</h3>
+                    <p>Accessible dans la classe et <strong>ses dérivées</strong></p>
+                    <div class="access-level">
+                        ✅ Même classe<br>
+                        ✅ Classes dérivées<br>
+                        ❌ Autres classes (même assembly)<br>
+                        ❌ Autres assemblies
+                    </div>
+                </div>
+                
+                <div class="modifier-card internal" onclick="showDetails('internal')">
+                    <h3><span class="icon">🏢</span> internal</h3>
+                    <p>Accessible dans le <strong>même assembly</strong></p>
+                    <div class="access-level">
+                        ✅ Même classe<br>
+                        ✅ Même assembly<br>
+                        ❌ Autres assemblies
+                    </div>
+                </div>
+                
+                <div class="modifier-card protected-internal" onclick="showDetails('protected-internal')">
+                    <h3><span class="icon">🔓</span> protected internal</h3>
+                    <p>Combinaison de <strong>protected OU internal</strong></p>
+                    <div class="access-level">
+                        ✅ Même classe<br>
+                        ✅ Classes dérivées (partout)<br>
+                        ✅ Même assembly<br>
+                        ❌ Autres assemblies (sauf dérivées)
+                    </div>
+                </div>
+                
+                <div class="modifier-card private-protected" onclick="showDetails('private-protected')">
+                    <h3><span class="icon">🔐</span> private protected</h3>
+                    <p>Combinaison de <strong>private ET protected</strong></p>
+                    <div class="access-level">
+                        ✅ Même classe<br>
+                        ✅ Classes dérivées (même assembly)<br>
+                        ❌ Même assembly (non dérivées)<br>
+                        ❌ Autres assemblies
+                    </div>
+                </div>
+            </div>
+        </div>
+        
+        <div class="section">
+            <h2>📊 Tableau Comparatif</h2>
+            <div class="comparison-table">
+                <table>
+                    <thead>
+                        <tr>
+                            <th>Modificateur</th>
+                            <th>Même classe</th>
+                            <th>Classe dérivée<br>(même assembly)</th>
+                            <th>Classe dérivée<br>(autre assembly)</th>
+                            <th>Autre classe<br>(même assembly)</th>
+                            <th>Autre assembly</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr>
+                            <td><strong>public</strong></td>
+                            <td class="check">✓</td>
+                            <td class="check">✓</td>
+                            <td class="check">✓</td>
+                            <td class="check">✓</td>
+                            <td class="check">✓</td>
+                        </tr>
+                        <tr>
+                            <td><strong>private</strong></td>
+                            <td class="check">✓</td>
+                            <td class="cross">✗</td>
+                            <td class="cross">✗</td>
+                            <td class="cross">✗</td>
+                            <td class="cross">✗</td>
+                        </tr>
+                        <tr>
+                            <td><strong>protected</strong></td>
+                            <td class="check">✓</td>
+                            <td class="check">✓</td>
+                            <td class="check">✓</td>
+                            <td class="cross">✗</td>
+                            <td class="cross">✗</td>
+                        </tr>
+                        <tr>
+                            <td><strong>internal</strong></td>
+                            <td class="check">✓</td>
+                            <td class="check">✓</td>
+                            <td class="cross">✗</td>
+                            <td class="check">✓</td>
+                            <td class="cross">✗</td>
+                        </tr>
+                        <tr>
+                            <td><strong>protected internal</strong></td>
+                            <td class="check">✓</td>
+                            <td class="check">✓</td>
+                            <td class="check">✓</td>
+                            <td class="check">✓</td>
+                            <td class="cross">✗</td>
+                        </tr>
+                        <tr>
+                            <td><strong>private protected</strong></td>
+                            <td class="check">✓</td>
+                            <td class="check">✓</td>
+                            <td class="cross">✗</td>
+                            <td class="cross">✗</td>
+                            <td class="cross">✗</td>
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
+        </div>
+        
+        <div class="section">
+            <h2>💻 Exemples de Code</h2>
+            <div class="code-block">
+<span class="keyword">public class</span> <span class="class-name">Vehicule</span><br>
+{<br>
+&nbsp;&nbsp;&nbsp;&nbsp;<span class="comment">// Public - accessible partout</span><br>
+&nbsp;&nbsp;&nbsp;&nbsp;<span class="keyword">public string</span> Marque { <span class="keyword">get</span>; <span class="keyword">set</span>; }<br>
+<br>
+&nbsp;&nbsp;&nbsp;&nbsp;<span class="comment">// Private - uniquement dans cette classe</span><br>
+&nbsp;&nbsp;&nbsp;&nbsp;<span class="keyword">private int</span> numeroSerie;<br>
+<br>
+&nbsp;&nbsp;&nbsp;&nbsp;<span class="comment">// Protected - dans cette classe et ses dérivées</span><br>
+&nbsp;&nbsp;&nbsp;&nbsp;<span class="keyword">protected decimal</span> prixAchat;<br>
+<br>
+&nbsp;&nbsp;&nbsp;&nbsp;<span class="comment">// Internal - dans le même assembly uniquement</span><br>
+&nbsp;&nbsp;&nbsp;&nbsp;<span class="keyword">internal string</span> CodeInterne;<br>
+<br>
+&nbsp;&nbsp;&nbsp;&nbsp;<span class="comment">// Protected Internal - protected OU internal</span><br>
+&nbsp;&nbsp;&nbsp;&nbsp;<span class="keyword">protected internal void</span> <span class="method">Maintenance</span>()<br>
+&nbsp;&nbsp;&nbsp;&nbsp;{<br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<span class="comment">// Accessible aux dérivées ET dans le même assembly</span><br>
+&nbsp;&nbsp;&nbsp;&nbsp;}<br>
+<br>
+&nbsp;&nbsp;&nbsp;&nbsp;<span class="comment">// Private Protected - protected ET internal</span><br>
+&nbsp;&nbsp;&nbsp;&nbsp;<span class="keyword">private protected void</span> <span class="method">ConfigurationInterne</span>()<br>
+&nbsp;&nbsp;&nbsp;&nbsp;{<br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<span class="comment">// Accessible aux dérivées dans le même assembly uniquement</span><br>
+&nbsp;&nbsp;&nbsp;&nbsp;}<br>
+}<br>
+<br>
+<span class="keyword">public class</span> <span class="class-name">Voiture</span> : <span class="class-name">Vehicule</span><br>
+{<br>
+&nbsp;&nbsp;&nbsp;&nbsp;<span class="keyword">public void</span> <span class="method">Test</span>()<br>
+&nbsp;&nbsp;&nbsp;&nbsp;{<br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Marque = <span class="string">"BMW"</span>;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<span class="comment">// ✓ OK - public</span><br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<span class="comment">// numeroSerie = 123;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;// ✗ ERREUR - private</span><br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;prixAchat = <span class="number">50000</span>;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<span class="comment">// ✓ OK - protected</span><br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;CodeInterne = <span class="string">"V001"</span>;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<span class="comment">// ✓ OK - internal (même assembly)</span><br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Maintenance();&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<span class="comment">// ✓ OK - protected internal</span><br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;ConfigurationInterne();&nbsp;&nbsp;&nbsp;&nbsp;<span class="comment">// ✓ OK - private protected (même assembly)</span><br>
+&nbsp;&nbsp;&nbsp;&nbsp;}<br>
+}
+            </div>
+        </div>
+        
+        <div class="section">
+            <h2>🎮 Scénarios Interactifs</h2>
+            <div class="interactive-section">
+                <p>Testez vos connaissances avec ces scénarios :</p>
+                <div class="scenario-buttons">
+                    <button onclick="scenario1()">Scénario 1: Même classe</button>
+                    <button onclick="scenario2()">Scénario 2: Classe dérivée</button>
+                    <button onclick="scenario3()">Scénario 3: Autre assembly</button>
+                    <button onclick="scenario4()">Scénario 4: Même assembly</button>
+                </div>
+                <div class="output" id="output">
+                    Cliquez sur un scénario pour voir l'explication...
+                </div>
+            </div>
+        </div>
+        
+        <div class="section">
+            <h2>💡 Conseils et Bonnes Pratiques</h2>
+            <div class="tip">
+                <h4>🎯 Principe du moindre privilège</h4>
+                <p>Utilisez toujours le modificateur d'accès le plus restrictif possible. Commencez par <strong>private</strong> et élargissez uniquement si nécessaire.</p>
+            </div>
+            <div class="tip">
+                <h4>🔒 Encapsulation</h4>
+                <p>Gardez les champs <strong>private</strong> et exposez-les via des propriétés <strong>public</strong> ou <strong>protected</strong> pour un meilleur contrôle.</p>
+            </div>
+            <div class="tip">
+                <h4>📦 API publique</h4>
+                <p>Utilisez <strong>internal</strong> pour les classes utilitaires qui ne doivent pas être exposées en dehors de votre bibliothèque.</p>
+            </div>
+            <div class="tip">
+                <h4>👨‍👩‍👧 Héritage</h4>
+                <p>Utilisez <strong>protected</strong> pour les membres que les classes dérivées doivent pouvoir utiliser ou surcharger.</p>
+            </div>
+        </div>
+    </div>
+    
+    <script>
+        function showDetails(modifier) {
+            const details = {
+                'public': {
+                    title: '🌍 public - Accès universel',
+                    desc: 'Le modificateur le plus permissif. Accessible de n\'importe où dans votre code, votre assembly ou d\'autres assemblies.',
+                    usage: 'Utilisez pour les API publiques, les méthodes et propriétés qui doivent être accessibles aux utilisateurs de votre bibliothèque.'
+                },
+                'private': {
+                    title: '🔒 private - Accès restreint',
+                    desc: 'Le modificateur le plus restrictif. Accessible uniquement dans la classe où il est déclaré.',
+                    usage: 'Utilisez pour l\'implémentation interne, les champs et méthodes d\'aide qui ne concernent que la classe.'
+                },
+                'protected': {
+                    title: '👨‍👩‍👧 protected - Accès familial',
+                    desc: 'Accessible dans la classe et toutes ses classes dérivées, peu importe l\'assembly.',
+                    usage: 'Utilisez pour les membres que vous voulez partager avec les classes dérivées mais pas avec le reste du monde.'
+                },
+                'internal': {
+                    title: '🏢 internal - Accès à l\'assembly',
+                    desc: 'Accessible uniquement dans le même assembly (projet). C\'est le modificateur par défaut pour les classes.',
+                    usage: 'Utilisez pour les classes et membres qui font partie de l\'implémentation interne de votre bibliothèque.'
+                },
+                'protected-internal': {
+                    title: '🔓 protected internal - Accès étendu',
+                    desc: 'Combinaison de protected OU internal. Accessible aux classes dérivées OU aux classes du même assembly.',
+                    usage: 'Utilisez quand vous voulez qu\'un membre soit accessible aux dérivées ET aux autres classes du même assembly.'
+                },
+                'private-protected': {
+                    title: '🔐 private protected - Accès limité',
+                    desc: 'Combinaison de private ET protected. Accessible uniquement aux classes dérivées dans le même assembly.',
+                    usage: 'Utilisez pour un contrôle très fin : les dérivées peuvent y accéder, mais uniquement dans votre assembly.'
+                }
+            };
+            
+            const info = details[modifier];
+            document.getElementById('output').innerHTML = `
+                <h3 style="color: #2c3e50; margin-bottom: 15px;">${info.title}</h3>
+                <p style="margin-bottom: 15px;"><strong>Description :</strong> ${info.desc}</p>
+                <p><strong>Quand l'utiliser :</strong> ${info.usage}</p>
+            `;
+        }
+        
+        function scenario1() {
+            document.getElementById('output').innerHTML = `
+                <h3 style="color: #27ae60;">✅ Scénario 1 : Accès dans la même classe</h3>
+                <p style="margin: 15px 0;"><strong>Question :</strong> Quels modificateurs permettent l'accès dans la même classe ?</p>
+                <p style="margin: 15px 0;"><strong>Réponse :</strong> <span style="color: #27ae60; font-weight: bold;">TOUS les modificateurs !</span></p>
+                <p>Dans la classe où un membre est déclaré, tous les modificateurs (public, private, protected, internal, protected internal, private protected) permettent d'y accéder.</p>
+                <div style="background: #e8f5e9; padding: 15px; border-radius: 8px; margin-top: 15px;">
+                    <strong>Exemple :</strong><br>
+                    <code>public class MaClasse {<br>
+                    &nbsp;&nbsp;private int x;<br>
+                    &nbsp;&nbsp;public void Test() { x = 5; } // ✓ OK<br>
+                    }</code>
+                </div>
+            `;
+        }
+        
+        function scenario2() {
+            document.getElementById('output').innerHTML = `
+                <h3 style="color: #3498db;">🔍 Scénario 2 : Accès dans une classe dérivée</h3>
+                <p style="margin: 15px 0;"><strong>Question :</strong> Quels modificateurs permettent l'accès dans une classe dérivée ?</p>
+                <p style="margin: 15px 0;"><strong>Réponse :</strong> <span style="color: #3498db; font-weight: bold;">public, protected, protected internal</span></p>
+                <p>Et <strong>private protected</strong> si la classe dérivée est dans le même assembly.</p>
+                <div style="background: #e3f2fd; padding: 15px; border-radius: 8px; margin-top: 15px;">
+                    <strong>Exemple :</strong><br>
+                    <code>public class Base {<br>
+                    &nbsp;&nbsp;protected int x;<br>
+                    }<br>
+                    public class Derivee : Base {<br>
+                    &nbsp;&nbsp;public void Test() { x = 5; } // ✓ OK<br>
+                    }</code>
+                </div>
+            `;
+        }
+        
+        function scenario3() {
+            document.getElementById('output').innerHTML = `
+                <h3 style="color: #e74c3c;">⚠️ Scénario 3 : Accès depuis un autre assembly</h3>
+                <p style="margin: 15px 0;"><strong>Question :</strong> Quels modificateurs permettent l'accès depuis un autre assembly ?</p>
+                <p style="margin: 15px 0;"><strong>Réponse :</strong> <span style="color: #e74c3c; font-weight: bold;">Uniquement public</span></p>
+                <p>Et <strong>protected</strong> si vous héritez de la classe (même dans un autre assembly).</p>
+                <div style="background: #ffebee; padding: 15px; border-radius: 8px; margin-top: 15px;">
+                    <strong>Important :</strong> Les modificateurs internal, protected internal et private protected ne traversent PAS les frontières d'assembly (sauf protected pour l'héritage).
+                </div>
+            `;
+        }
+        
+        function scenario4() {
+            document.getElementById('output').innerHTML = `
+                <h3 style="color: #9b59b6;">📦 Scénario 4 : Accès dans le même assembly</h3>
+                <p style="margin: 15px 0;"><strong>Question :</strong> Quels modificateurs permettent l'accès à toutes les classes du même assembly ?</p>
+                <p style="margin: 15px 0;"><strong>Réponse :</strong> <span style="color: #9b59b6; font-weight: bold;">public, internal, protected internal</span></p>
+                <p>Les modificateurs private et protected ne permettent PAS l'accès aux autres classes (sauf héritage pour protected).</p>
+                <div style="background: #f3e5f5; padding: 15px; border-radius: 8px; margin-top: 15px;">
+                    <strong>Astuce :</strong> Utilisez internal pour les classes utilitaires qui ne doivent pas être exposées publiquement mais doivent être partagées dans votre projet.
+                </div>
+            `;
+        }
+    </script>
+</body>
+</html>

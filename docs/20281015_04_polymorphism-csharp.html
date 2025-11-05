@@ -1,0 +1,329 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Polymorphisme en C# .NET</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+        
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            padding: 20px;
+            min-height: 100vh;
+        }
+        
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+            background: white;
+            border-radius: 20px;
+            padding: 40px;
+            box-shadow: 0 20px 60px rgba(0,0,0,0.3);
+        }
+        
+        h1 {
+            color: #667eea;
+            text-align: center;
+            margin-bottom: 10px;
+            font-size: 2.5em;
+        }
+        
+        .subtitle {
+            text-align: center;
+            color: #666;
+            margin-bottom: 40px;
+            font-size: 1.1em;
+        }
+        
+        .section {
+            margin-bottom: 40px;
+        }
+        
+        h2 {
+            color: #764ba2;
+            margin-bottom: 20px;
+            padding-bottom: 10px;
+            border-bottom: 3px solid #667eea;
+        }
+        
+        .hierarchy {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            gap: 20px;
+            margin: 30px 0;
+        }
+        
+        .class-box {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: white;
+            padding: 20px 40px;
+            border-radius: 15px;
+            box-shadow: 0 5px 15px rgba(0,0,0,0.2);
+            min-width: 250px;
+            text-align: center;
+            transition: transform 0.3s ease;
+        }
+        
+        .class-box:hover {
+            transform: scale(1.05);
+        }
+        
+        .class-box h3 {
+            margin-bottom: 10px;
+            font-size: 1.5em;
+        }
+        
+        .class-box.parent {
+            background: linear-gradient(135deg, #f093fb 0%, #f5576c 100%);
+        }
+        
+        .arrow {
+            font-size: 2em;
+            color: #667eea;
+        }
+        
+        .children {
+            display: flex;
+            gap: 20px;
+            flex-wrap: wrap;
+            justify-content: center;
+        }
+        
+        .code-block {
+            background: #282c34;
+            color: #abb2bf;
+            padding: 20px;
+            border-radius: 10px;
+            overflow-x: auto;
+            margin: 20px 0;
+            font-family: 'Courier New', monospace;
+            font-size: 0.95em;
+            line-height: 1.6;
+        }
+        
+        .keyword {
+            color: #c678dd;
+        }
+        
+        .class-name {
+            color: #e5c07b;
+        }
+        
+        .method {
+            color: #61afef;
+        }
+        
+        .string {
+            color: #98c379;
+        }
+        
+        .comment {
+            color: #5c6370;
+            font-style: italic;
+        }
+        
+        .demo-section {
+            background: #f8f9fa;
+            padding: 30px;
+            border-radius: 15px;
+            margin: 20px 0;
+        }
+        
+        .demo-buttons {
+            display: flex;
+            gap: 15px;
+            margin: 20px 0;
+            flex-wrap: wrap;
+        }
+        
+        button {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: white;
+            border: none;
+            padding: 15px 30px;
+            border-radius: 10px;
+            cursor: pointer;
+            font-size: 1em;
+            transition: all 0.3s ease;
+            box-shadow: 0 4px 10px rgba(0,0,0,0.2);
+        }
+        
+        button:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 6px 15px rgba(0,0,0,0.3);
+        }
+        
+        .output {
+            background: white;
+            padding: 20px;
+            border-radius: 10px;
+            margin-top: 20px;
+            min-height: 100px;
+            border-left: 5px solid #667eea;
+            font-family: monospace;
+        }
+        
+        .advantage {
+            background: #e8f5e9;
+            padding: 15px;
+            border-radius: 10px;
+            margin: 10px 0;
+            border-left: 5px solid #4caf50;
+        }
+        
+        .advantage h4 {
+            color: #2e7d32;
+            margin-bottom: 5px;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h1>🎭 Polymorphisme en C# .NET</h1>
+        <p class="subtitle">Un concept clé de la Programmation Orientée Objet</p>
+        
+        <div class="section">
+            <h2>📚 Qu'est-ce que le Polymorphisme ?</h2>
+            <p>Le polymorphisme permet à des objets de différentes classes d'être traités comme des objets d'une classe parente commune. Le mot "polymorphisme" signifie "plusieurs formes".</p>
+        </div>
+        
+        <div class="section">
+            <h2>🏗️ Hiérarchie des Classes</h2>
+            <div class="hierarchy">
+                <div class="class-box parent">
+                    <h3>Animal</h3>
+                    <p>Classe de base</p>
+                </div>
+                <div class="arrow">↓</div>
+                <div class="children">
+                    <div class="class-box">
+                        <h3>Chien</h3>
+                        <p>Classe dérivée</p>
+                    </div>
+                    <div class="class-box">
+                        <h3>Chat</h3>
+                        <p>Classe dérivée</p>
+                    </div>
+                    <div class="class-box">
+                        <h3>Oiseau</h3>
+                        <p>Classe dérivée</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+        
+        <div class="section">
+            <h2>💻 Code C#</h2>
+            <div class="code-block">
+<span class="comment">// Classe de base</span><br>
+<span class="keyword">public class</span> <span class="class-name">Animal</span><br>
+{<br>
+&nbsp;&nbsp;&nbsp;&nbsp;<span class="keyword">public virtual void</span> <span class="method">FaireDuBruit</span>()<br>
+&nbsp;&nbsp;&nbsp;&nbsp;{<br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Console.WriteLine(<span class="string">"L'animal fait un bruit"</span>);<br>
+&nbsp;&nbsp;&nbsp;&nbsp;}<br>
+}<br>
+<br>
+<span class="comment">// Classes dérivées</span><br>
+<span class="keyword">public class</span> <span class="class-name">Chien</span> : <span class="class-name">Animal</span><br>
+{<br>
+&nbsp;&nbsp;&nbsp;&nbsp;<span class="keyword">public override void</span> <span class="method">FaireDuBruit</span>()<br>
+&nbsp;&nbsp;&nbsp;&nbsp;{<br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Console.WriteLine(<span class="string">"🐕 Woof! Woof!"</span>);<br>
+&nbsp;&nbsp;&nbsp;&nbsp;}<br>
+}<br>
+<br>
+<span class="keyword">public class</span> <span class="class-name">Chat</span> : <span class="class-name">Animal</span><br>
+{<br>
+&nbsp;&nbsp;&nbsp;&nbsp;<span class="keyword">public override void</span> <span class="method">FaireDuBruit</span>()<br>
+&nbsp;&nbsp;&nbsp;&nbsp;{<br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Console.WriteLine(<span class="string">"🐱 Miaou! Miaou!"</span>);<br>
+&nbsp;&nbsp;&nbsp;&nbsp;}<br>
+}<br>
+<br>
+<span class="keyword">public class</span> <span class="class-name">Oiseau</span> : <span class="class-name">Animal</span><br>
+{<br>
+&nbsp;&nbsp;&nbsp;&nbsp;<span class="keyword">public override void</span> <span class="method">FaireDuBruit</span>()<br>
+&nbsp;&nbsp;&nbsp;&nbsp;{<br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Console.WriteLine(<span class="string">"🐦 Cui! Cui!"</span>);<br>
+&nbsp;&nbsp;&nbsp;&nbsp;}<br>
+}
+            </div>
+        </div>
+        
+        <div class="section">
+            <h2>🎮 Démonstration Interactive</h2>
+            <div class="demo-section">
+                <p>Cliquez sur les boutons pour voir le polymorphisme en action :</p>
+                <div class="demo-buttons">
+                    <button onclick="demonstrerChien()">Chien</button>
+                    <button onclick="demonstrerChat()">Chat</button>
+                    <button onclick="demonstrerOiseau()">Oiseau</button>
+                    <button onclick="demonstrerTous()">Tous les animaux</button>
+                </div>
+                <div class="output" id="output">
+                    Cliquez sur un bouton pour voir le résultat...
+                </div>
+            </div>
+        </div>
+        
+        <div class="section">
+            <h2>✨ Avantages du Polymorphisme</h2>
+            <div class="advantage">
+                <h4>🔄 Flexibilité</h4>
+                <p>Vous pouvez traiter différents objets de manière uniforme via leur classe parente.</p>
+            </div>
+            <div class="advantage">
+                <h4>📦 Réutilisabilité</h4>
+                <p>Le code écrit pour la classe parente fonctionne avec toutes les classes dérivées.</p>
+            </div>
+            <div class="advantage">
+                <h4>🛠️ Maintenabilité</h4>
+                <p>Facile d'ajouter de nouvelles classes dérivées sans modifier le code existant.</p>
+            </div>
+        </div>
+    </div>
+    
+    <script>
+        function demonstrerChien() {
+            document.getElementById('output').innerHTML = '🐕 Woof! Woof!<br><br><em>Le chien utilise sa propre implémentation de FaireDuBruit()</em>';
+        }
+        
+        function demonstrerChat() {
+            document.getElementById('output').innerHTML = '🐱 Miaou! Miaou!<br><br><em>Le chat utilise sa propre implémentation de FaireDuBruit()</em>';
+        }
+        
+        function demonstrerOiseau() {
+            document.getElementById('output').innerHTML = '🐦 Cui! Cui!<br><br><em>L\'oiseau utilise sa propre implémentation de FaireDuBruit()</em>';
+        }
+        
+        function demonstrerTous() {
+            document.getElementById('output').innerHTML = `
+                <strong>Démonstration du polymorphisme :</strong><br><br>
+                <code>List&lt;Animal&gt; animaux = new List&lt;Animal&gt;<br>
+                {<br>
+                &nbsp;&nbsp;new Chien(),<br>
+                &nbsp;&nbsp;new Chat(),<br>
+                &nbsp;&nbsp;new Oiseau()<br>
+                };<br><br>
+                foreach (Animal animal in animaux)<br>
+                {<br>
+                &nbsp;&nbsp;animal.FaireDuBruit();<br>
+                }</code><br><br>
+                <strong>Résultat :</strong><br>
+                🐕 Woof! Woof!<br>
+                🐱 Miaou! Miaou!<br>
+                🐦 Cui! Cui!<br><br>
+                <em>Chaque animal appelle automatiquement sa propre méthode !</em>
+            `;
+        }
+    </script>
+</body>
+</html>
