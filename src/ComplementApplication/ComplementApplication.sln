@@ -2,6 +2,10 @@
 Microsoft Visual Studio Solution File, Format Version 12.00
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Poo", "Poo\Poo.csproj", "{A243D02E-15B1-4E61-852C-667FA1CDC8DF}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Conditions", "Conditions\Conditions.csproj", "{5B5309AC-524B-46D6-870E-FFC42470F0F4}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Loops", "Loops\Loops.csproj", "{70E92B59-D9B0-4038-83E0-6E67147D87E5}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -12,5 +16,13 @@ Global
 		{A243D02E-15B1-4E61-852C-667FA1CDC8DF}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{A243D02E-15B1-4E61-852C-667FA1CDC8DF}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{A243D02E-15B1-4E61-852C-667FA1CDC8DF}.Release|Any CPU.Build.0 = Release|Any CPU
+		{5B5309AC-524B-46D6-870E-FFC42470F0F4}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{5B5309AC-524B-46D6-870E-FFC42470F0F4}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{5B5309AC-524B-46D6-870E-FFC42470F0F4}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{5B5309AC-524B-46D6-870E-FFC42470F0F4}.Release|Any CPU.Build.0 = Release|Any CPU
+		{70E92B59-D9B0-4038-83E0-6E67147D87E5}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{70E92B59-D9B0-4038-83E0-6E67147D87E5}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{70E92B59-D9B0-4038-83E0-6E67147D87E5}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{70E92B59-D9B0-4038-83E0-6E67147D87E5}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 EndGlobal
