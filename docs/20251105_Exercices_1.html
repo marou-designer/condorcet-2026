@@ -1,0 +1,921 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Exercices POO en C# - Niveau Débutant</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+        
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            line-height: 1.6;
+            color: #333;
+            background-color: #f5f5f5;
+            padding: 20px;
+        }
+        
+        .container {
+            max-width: 1000px;
+            margin: 0 auto;
+            background-color: white;
+            padding: 40px;
+            box-shadow: 0 0 10px rgba(0,0,0,0.1);
+        }
+        
+        h1 {
+            color: #0066cc;
+            text-align: center;
+            margin-bottom: 10px;
+            font-size: 2.2em;
+        }
+        
+        .subtitle {
+            text-align: center;
+            color: #666;
+            margin-bottom: 30px;
+            font-size: 1em;
+        }
+        
+        h2 {
+            color: #0066cc;
+            margin-top: 40px;
+            margin-bottom: 15px;
+            padding-bottom: 10px;
+            border-bottom: 3px solid #0066cc;
+            font-size: 1.6em;
+            page-break-before: avoid;
+        }
+        
+        h3 {
+            color: #0080ff;
+            margin-top: 20px;
+            margin-bottom: 12px;
+            font-size: 1.1em;
+        }
+        
+        p {
+            margin-bottom: 12px;
+            text-align: justify;
+        }
+        
+        .code-block {
+            background-color: #f4f4f4;
+            border-left: 4px solid #0066cc;
+            padding: 12px;
+            margin: 12px 0;
+            font-family: 'Courier New', monospace;
+            overflow-x: auto;
+            font-size: 0.85em;
+            line-height: 1.4;
+            white-space: pre-wrap;
+            word-wrap: break-word;
+        }
+        
+        .note {
+            background-color: #e7f3ff;
+            border-left: 4px solid #2196F3;
+            padding: 12px;
+            margin: 12px 0;
+            border-radius: 4px;
+            font-size: 0.95em;
+        }
+        
+        .solution {
+            background-color: #e8f5e9;
+            border-left: 4px solid #4CAF50;
+            padding: 12px;
+            margin: 12px 0;
+            border-radius: 4px;
+        }
+        
+        .solution-title {
+            color: #2e7d32;
+            font-weight: bold;
+            cursor: pointer;
+            user-select: none;
+            padding: 5px;
+            border-radius: 3px;
+            transition: background-color 0.2s;
+        }
+        
+        .solution-title:hover {
+            background-color: #c8e6c9;
+            text-decoration: none;
+        }
+        
+        .solution-content {
+            margin-top: 10px;
+            display: none;
+        }
+        
+        .solution.show .solution-content {
+            display: block;
+        }
+        
+        .exercise {
+            background-color: #f9f9f9;
+            border: 2px solid #0066cc;
+            padding: 15px;
+            margin: 20px 0;
+            border-radius: 4px;
+            page-break-inside: avoid;
+        }
+        
+        .exercise-number {
+            display: inline-block;
+            background-color: #0066cc;
+            color: white;
+            padding: 5px 10px;
+            border-radius: 4px;
+            margin-bottom: 10px;
+            font-weight: bold;
+        }
+        
+        .difficulty {
+            display: inline-block;
+            padding: 4px 8px;
+            border-radius: 3px;
+            font-size: 0.85em;
+            margin-left: 10px;
+            font-weight: bold;
+        }
+        
+        .difficulty.facile {
+            background-color: #4CAF50;
+            color: white;
+        }
+        
+        .difficulty.moyen {
+            background-color: #FF9800;
+            color: white;
+        }
+        
+        .difficulty.difficile {
+            background-color: #f44336;
+            color: white;
+        }
+        
+        .hint {
+            background-color: #fff3cd;
+            border-left: 4px solid #ffc107;
+            padding: 10px;
+            margin: 10px 0;
+            border-radius: 4px;
+            font-size: 0.95em;
+        }
+        
+        .objectives {
+            background-color: #e3f2fd;
+            border-left: 4px solid #1976d2;
+            padding: 12px;
+            margin: 12px 0;
+            border-radius: 4px;
+        }
+        
+        .objectives h4 {
+            color: #1565c0;
+            margin-bottom: 8px;
+        }
+        
+        ul, ol {
+            margin-left: 20px;
+            margin-bottom: 12px;
+        }
+        
+        li {
+            margin-bottom: 6px;
+        }
+        
+        @media print {
+            body { background-color: white; padding: 0; }
+            .container { box-shadow: none; padding: 0; margin: 0; }
+            .solution-content { display: block !important; }
+        }
+    </style>
+    <script>
+        function toggleSolution(element) {
+            element.closest('.solution').classList.toggle('show');
+        }
+    </script>
+</head>
+<body>
+    <div class="container">
+        <h1>💻 Exercices POO en C#</h1>
+        <p class="subtitle">Niveau Débutant - Pratique Progressive</p>
+        
+        <div class="note">
+            <strong>📌 Comment utiliser ce document :</strong>
+            <ul>
+                <li>Lisez d'abord l'énoncé de l'exercice</li>
+                <li>Essayez de le résoudre par vous-même</li>
+                <li>Consultez les indices si vous êtes bloqué</li>
+                <li>Comparez votre solution avec celle proposée</li>
+            </ul>
+        </div>
+        
+        <!-- EXERCICE 1 -->
+        <div class="exercise">
+            <div class="exercise-number">Exercice 1</div>
+            <span class="difficulty facile">Facile</span>
+            <h3>Classe Personnage Simple</h3>
+            
+            <div class="objectives">
+                <h4>🎯 Objectifs :</h4>
+                <ul>
+                    <li>Créer une classe simple</li>
+                    <li>Ajouter des propriétés</li>
+                    <li>Créer un constructeur</li>
+                    <li>Ajouter des méthodes</li>
+                </ul>
+            </div>
+            
+            <p><strong>Énoncé :</strong></p>
+            <p>Créez une classe <code>Personnage</code> avec les propriétés suivantes :</p>
+            <ul>
+                <li>Nom (string)</li>
+                <li>Classe (string : Guerrier, Magicien, Archer)</li>
+                <li>PuntsDeVie (int)</li>
+                <li>Niveau (int)</li>
+            </ul>
+            <p>Ajoutez :</p>
+            <ul>
+                <li>Un constructeur qui initialise tous les attributs</li>
+                <li>Une méthode <code>Presenter()</code> qui affiche les infos du personnage</li>
+                <li>Une méthode <code>PrendreExp(int exp)</code> qui augmente le niveau tous les 100 exp</li>
+            </ul>
+            
+            <div class="hint">
+                <strong>💡 Indice :</strong> Pensez à stocker l'expérience accumulée et à vérifier si elle atteint 100 pour augmenter le niveau.
+            </div>
+            
+            <div class="solution">
+                <div class="solution-title" onclick="toggleSolution(this)">✅ Voir la solution</div>
+                <div class="solution-content">
+                    <div class="code-block">public class Personnage {
+    public string Nom { get; set; }
+    public string Classe { get; set; }
+    public int PointsDeVie { get; set; }
+    public int Niveau { get; set; }
+    private int experience = 0;
+    
+    public Personnage(string nom, string classe, 
+                      int pointsDeVie, int niveau) {
+        Nom = nom;
+        Classe = classe;
+        PointsDeVie = pointsDeVie;
+        Niveau = niveau;
+    }
+    
+    public void Presenter() {
+        Console.WriteLine($"--- {Nom} ---");
+        Console.WriteLine($"Classe : {Classe}");
+        Console.WriteLine($"Niveau : {Niveau}");
+        Console.WriteLine($"PV : {PointsDeVie}");
+        Console.WriteLine($"Expérience : {experience}");
+    }
+    
+    public void PrendreExp(int exp) {
+        experience += exp;
+        Console.WriteLine($"{Nom} gagne {exp} exp");
+        
+        while (experience >= 100) {
+            experience -= 100;
+            Niveau++;
+            Console.WriteLine($"💪 {Nom} passe au niveau {Niveau}!");
+        }
+    }
+}
+
+// Utilisation
+Personnage hero = new Personnage("Aragorn", "Guerrier", 100, 1);
+hero.Presenter();
+hero.PrendreExp(150);
+hero.Presenter();
+                    </div>
+                </div>
+            </div>
+        </div>
+        
+        <!-- EXERCICE 2 -->
+        <div class="exercise">
+            <div class="exercise-number">Exercice 2</div>
+            <span class="difficulty facile">Facile</span>
+            <h3>Classe Compte Bancaire</h3>
+            
+            <div class="objectives">
+                <h4>🎯 Objectifs :</h4>
+                <ul>
+                    <li>Utiliser l'encapsulation</li>
+                    <li>Protéger les données avec des propriétés</li>
+                    <li>Ajouter de la validation</li>
+                </ul>
+            </div>
+            
+            <p><strong>Énoncé :</strong></p>
+            <p>Créez une classe <code>CompteBancaire</code> avec :</p>
+            <ul>
+                <li>Propriétés : Titulaire (string), NumeroCompte (string), Solde (decimal)</li>
+                <li>Le solde doit être PRIVÉ et non accessible directement</li>
+                <li>Une méthode <code>Deposer(decimal montant)</code> qui ajoute au solde</li>
+                <li>Une méthode <code>Retirer(decimal montant)</code> qui retire du solde</li>
+                <li>Une méthode <code>AfficherSolde()</code> qui affiche le solde</li>
+                <li>Les retraits ne doivent pas être possibles si le solde est insuffisant</li>
+            </ul>
+            
+            <div class="hint">
+                <strong>💡 Indice :</strong> Utilisez une propriété privée pour stocker le solde et une propriété publique en lecture seule pour le consulter. Validez les montants pour qu'ils soient positifs.
+            </div>
+            
+            <div class="solution">
+                <div class="solution-title" onclick="toggleSolution(this)">✅ Voir la solution</div>
+                <div class="solution-content">
+                    <div class="code-block">public class CompteBancaire {
+    public string Titulaire { get; set; }
+    public string NumeroCompte { get; set; }
+    private decimal solde;
+    
+    public decimal Solde {
+        get { return solde; }
+    }
+    
+    public CompteBancaire(string titulaire, 
+                         string numeroCompte, 
+                         decimal soldeInitial) {
+        Titulaire = titulaire;
+        NumeroCompte = numeroCompte;
+        solde = soldeInitial;
+    }
+    
+    public void Deposer(decimal montant) {
+        if (montant <= 0) {
+            Console.WriteLine("❌ Montant invalide");
+            return;
+        }
+        
+        solde += montant;
+        Console.WriteLine($"✅ Dépôt de {montant}€ effectué");
+    }
+    
+    public void Retirer(decimal montant) {
+        if (montant <= 0) {
+            Console.WriteLine("❌ Montant invalide");
+            return;
+        }
+        
+        if (montant > solde) {
+            Console.WriteLine("❌ Solde insuffisant");
+            return;
+        }
+        
+        solde -= montant;
+        Console.WriteLine($"✅ Retrait de {montant}€ effectué");
+    }
+    
+    public void AfficherSolde() {
+        Console.WriteLine($"Compte {NumeroCompte} - {Titulaire}");
+        Console.WriteLine($"Solde : {solde}€");
+    }
+}
+
+// Utilisation
+CompteBancaire compte = new CompteBancaire("Jean", "123456", 1000);
+compte.AfficherSolde();
+compte.Deposer(500);
+compte.Retirer(200);
+compte.Retirer(2000); // Échec
+compte.AfficherSolde();
+                    </div>
+                </div>
+            </div>
+        </div>
+        
+        <!-- EXERCICE 3 -->
+        <div class="exercise">
+            <div class="exercise-number">Exercice 3</div>
+            <span class="difficulty moyen">Moyen</span>
+            <h3>Validation de Numéro de Registre National (Belgique)</h3>
+            
+            <div class="objectives">
+                <h4>🎯 Objectifs :</h4>
+                <ul>
+                    <li>Valider un format de données</li>
+                    <li>Utiliser des boucles et conditions</li>
+                    <li>Calculer un checksum</li>
+                </ul>
+            </div>
+            
+            <p><strong>Énoncé :</strong></p>
+            <p>Un numéro de registre national belge a le format : <code>AAMMDDXXXCC</code></p>
+            <ul>
+                <li><strong>AA</strong> : deux derniers chiffres de l'année de naissance</li>
+                <li><strong>MM</strong> : mois de naissance (01-12)</li>
+                <li><strong>DD</strong> : jour de naissance (01-31)</li>
+                <li><strong>XXX</strong> : numéro séquentiel</li>
+                <li><strong>CC</strong> : chiffres de contrôle (checksum)</li>
+            </ul>
+            
+            <p>Créez une classe <code>ValidateurNRN</code> avec une méthode statique <code>Valider(string nrn)</code> qui :</p>
+            <ul>
+                <li>Vérifie que le NRN contient exactement 11 chiffres</li>
+                <li>Vérifie que le mois est entre 01 et 12</li>
+                <li>Vérifie que le jour est entre 01 et 31</li>
+                <li>Calcule le checksum : 97 - (NRN_sans_CC % 97) = CC</li>
+                <li>Retourne true si valide, false sinon</li>
+            </ul>
+            
+            <div class="hint">
+                <strong>💡 Indice :</strong> 
+                <ul>
+                    <li>Vérifiez d'abord si la chaîne contient 11 caractères</li>
+                    <li>Utilisez int.TryParse() pour vérifier que tous les caractères sont des chiffres</li>
+                    <li>Extrayez les parties avec Substring()</li>
+                    <li>Pour le checksum, convertissez les 9 premiers chiffres en nombre entier</li>
+                </ul>
+            </div>
+            
+            <div class="solution">
+                <div class="solution-title" onclick="toggleSolution(this)">✅ Voir la solution</div>
+                <div class="solution-content">
+                    <div class="code-block">public class ValidateurNRN {
+    public static bool Valider(string nrn) {
+        // Vérifier la longueur
+        if (nrn == null || nrn.Length != 11) {
+            Console.WriteLine("❌ Le NRN doit contenir 11 chiffres");
+            return false;
+        }
+        
+        // Vérifier que ce sont tous des chiffres
+        for (int i = 0; i < 11; i++) {
+            if (!char.IsDigit(nrn[i])) {
+                Console.WriteLine("❌ Le NRN doit contenir uniquement des chiffres");
+                return false;
+            }
+        }
+        
+        // Extraire les parties
+        string mois = nrn.Substring(2, 2);
+        string jour = nrn.Substring(4, 2);
+        string checksum = nrn.Substring(9, 2);
+        
+        int moisInt = int.Parse(mois);
+        int jourInt = int.Parse(jour);
+        
+        // Vérifier le mois
+        if (moisInt < 1 || moisInt > 12) {
+            Console.WriteLine("❌ Le mois doit être entre 01 et 12");
+            return false;
+        }
+        
+        // Vérifier le jour
+        if (jourInt < 1 || jourInt > 31) {
+            Console.WriteLine("❌ Le jour doit être entre 01 et 31");
+            return false;
+        }
+        
+        // Vérifier le checksum
+        string nrnSansChecksum = nrn.Substring(0, 9);
+        long nombreNRN = long.Parse(nrnSansChecksum);
+        int checksumCalcule = (97 - (int)(nombreNRN % 97));
+        int checksumFourni = int.Parse(checksum);
+        
+        if (checksumCalcule != checksumFourni) {
+            Console.WriteLine($"❌ Checksum invalide (obtenu {checksumCalcule}, fourni {checksumFourni})");
+            return false;
+        }
+        
+        Console.WriteLine("✅ NRN valide!");
+        return true;
+    }
+}
+
+// Utilisation
+ValidateurNRN.Valider("85051822361"); // Valide
+ValidateurNRN.Valider("85131822361"); // Invalide (mois 13)
+ValidateurNRN.Valider("85051832361"); // Invalide (jour 32)
+ValidateurNRN.Valider("8505182236");  // Invalide (10 chiffres)
+                    </div>
+                </div>
+            </div>
+        </div>
+        
+        <!-- EXERCICE 4 -->
+        <div class="exercise">
+            <div class="exercise-number">Exercice 4</div>
+            <span class="difficulty moyen">Moyen</span>
+            <h3>Classe Produit avec Inventaire</h3>
+            
+            <div class="objectives">
+                <h4>🎯 Objectifs :</h4>
+                <ul>
+                    <li>Gérer l'état d'un objet</li>
+                    <li>Utiliser des listes (List)</li>
+                    <li>Implémenter des méthodes de gestion</li>
+                </ul>
+            </div>
+            
+            <p><strong>Énoncé :</strong></p>
+            <p>Créez une classe <code>Produit</code> avec :</p>
+            <ul>
+                <li>Propriétés : Nom, Prix, Stock</li>
+                <li>Méthode <code>AjouterStock(int quantite)</code></li>
+                <li>Méthode <code>RetirerStock(int quantite)</code> avec vérification</li>
+                <li>Méthode <code>Acheter(int quantite)</code> qui retourne le prix total ou -1 si impossible</li>
+            </ul>
+            
+            <p>Puis créez une classe <code>Magasin</code> avec :</p>
+            <ul>
+                <li>Une liste de produits</li>
+                <li>Méthode <code>AjouterProduit(Produit p)</code></li>
+                <li>Méthode <code>AfficherProduits()</code> qui liste tous les produits et leurs stocks</li>
+                <li>Méthode <code>TrouverProduit(string nom)</code> qui retourne le produit ou null</li>
+            </ul>
+            
+            <div class="hint">
+                <strong>💡 Indice :</strong> Utilisez <code>List&lt;Produit&gt;</code> pour stocker les produits. La méthode Acheter() doit vérifier le stock avant de retirer.
+            </div>
+            
+            <div class="solution">
+                <div class="solution-title" onclick="toggleSolution(this)">✅ Voir la solution</div>
+                <div class="solution-content">
+                    <div class="code-block">public class Produit {
+    public string Nom { get; set; }
+    public decimal Prix { get; set; }
+    public int Stock { get; set; }
+    
+    public Produit(string nom, decimal prix, int stock) {
+        Nom = nom;
+        Prix = prix;
+        Stock = stock;
+    }
+    
+    public void AjouterStock(int quantite) {
+        if (quantite > 0) {
+            Stock += quantite;
+            Console.WriteLine($"✅ {quantite} unité(s) ajoutée(s) à {Nom}");
+        }
+    }
+    
+    public bool RetirerStock(int quantite) {
+        if (quantite <= 0) return false;
+        if (quantite > Stock) return false;
+        
+        Stock -= quantite;
+        return true;
+    }
+    
+    public decimal Acheter(int quantite) {
+        if (quantite <= 0) return -1;
+        if (quantite > Stock) return -1;
+        
+        decimal total = quantite * Prix;
+        RetirerStock(quantite);
+        return total;
+    }
+}
+
+public class Magasin {
+    public string Nom { get; set; }
+    private List<Produit> produits = new List<Produit>();
+    
+    public Magasin(string nom) {
+        Nom = nom;
+    }
+    
+    public void AjouterProduit(Produit p) {
+        produits.Add(p);
+        Console.WriteLine($"✅ {p.Nom} ajouté au magasin");
+    }
+    
+    public void AfficherProduits() {
+        Console.WriteLine($"\n📦 Produits du magasin {Nom}:");
+        foreach (var produit in produits) {
+            Console.WriteLine($"  - {produit.Nom} : {produit.Prix}€ (Stock: {produit.Stock})");
+        }
+    }
+    
+    public Produit TrouverProduit(string nom) {
+        foreach (var produit in produits) {
+            if (produit.Nom == nom) {
+                return produit;
+            }
+        }
+        return null;
+    }
+}
+
+// Utilisation
+Magasin magasin = new Magasin("Supermarché");
+Produit pommes = new Produit("Pommes", 2.50m, 50);
+Produit pain = new Produit("Pain", 1.20m, 30);
+
+magasin.AjouterProduit(pommes);
+magasin.AjouterProduit(pain);
+magasin.AfficherProduits();
+
+Produit p = magasin.TrouverProduit("Pommes");
+decimal prix = p.Acheter(5);
+Console.WriteLine($"Total : {prix}€");
+magasin.AfficherProduits();
+                    </div>
+                </div>
+            </div>
+        </div>
+        
+        <!-- EXERCICE 5 -->
+        <div class="exercise">
+            <div class="exercise-number">Exercice 5</div>
+            <span class="difficulty moyen">Moyen</span>
+            <h3>Héritage : Animaux et Sons</h3>
+            
+            <div class="objectives">
+                <h4>🎯 Objectifs :</h4>
+                <ul>
+                    <li>Utiliser l'héritage</li>
+                    <li>Surcharger des méthodes (override)</li>
+                    <li>Utiliser le polymorphisme</li>
+                </ul>
+            </div>
+            
+            <p><strong>Énoncé :</strong></p>
+            <p>Créez une classe de base <code>Animal</code> avec :</p>
+            <ul>
+                <li>Propriétés : Nom, Age, EspeceType</li>
+                <li>Méthode virtuelle <code>FaireBruit()</code> qui affiche "L'animal fait un bruit"</li>
+                <li>Méthode <code>Manger(string nourriture)</code></li>
+            </ul>
+            
+            <p>Créez ensuite 3 classes dérivées :</p>
+            <ul>
+                <li><code>Chien</code> : FaireBruit() → "Woof!"</li>
+                <li><code>Chat</code> : FaireBruit() → "Miaou!"</li>
+                <li><code>Oiseau</code> : FaireBruit() → "Piou piou!", + propriété Couleur</li>
+            </ul>
+            
+            <p>Dans le Main, créez un tableau d'animaux et appelez FaireBruit() sur chacun en boucle.</p>
+            
+            <div class="hint">
+                <strong>💡 Indice :</strong> 
+                <ul>
+                    <li>Utilisez le mot clé <code>virtual</code> dans la méthode de base</li>
+                    <li>Utilisez <code>override</code> dans les classes dérivées</li>
+                    <li>Vous pouvez appeler la méthode de base avec <code>base.FaireBruit()</code></li>
+                </ul>
+            </div>
+            
+            <div class="solution">
+                <div class="solution-title" onclick="toggleSolution(this)">✅ Voir la solution</div>
+                <div class="solution-content">
+                    <div class="code-block">public class Animal {
+    public string Nom { get; set; }
+    public int Age { get; set; }
+    
+    public Animal(string nom, int age) {
+        Nom = nom;
+        Age = age;
+    }
+    
+    public virtual void FaireBruit() {
+        Console.WriteLine($"{Nom} fait un bruit");
+    }
+    
+    public void Manger(string nourriture) {
+        Console.WriteLine($"{Nom} mange {nourriture}");
+    }
+}
+
+public class Chien : Animal {
+    public Chien(string nom, int age) : base(nom, age) { }
+    
+    public override void FaireBruit() {
+        Console.WriteLine($"{Nom} : Woof! Woof!");
+    }
+}
+
+public class Chat : Animal {
+    public Chat(string nom, int age) : base(nom, age) { }
+    
+    public override void FaireBruit() {
+        Console.WriteLine($"{Nom} : Miaou! 😸");
+    }
+}
+
+public class Oiseau : Animal {
+    public string Couleur { get; set; }
+    
+    public Oiseau(string nom, int age, string couleur) 
+        : base(nom, age) {
+        Couleur = couleur;
+    }
+    
+    public override void FaireBruit() {
+        Console.WriteLine($"{Nom} ({Couleur}) : Piou piou! 🐦");
+    }
+}
+
+// Utilisation (polymorphisme)
+Animal[] animaux = new Animal[4];
+animaux[0] = new Chien("Rex", 5);
+animaux[1] = new Chat("Minou", 3);
+animaux[2] = new Oiseau("Tweety", 2, "Jaune");
+animaux[3] = new Chien("Rox", 7);
+
+Console.WriteLine("🎵 Concert d'animaux :\n");
+foreach (Animal animal in animaux) {
+    animal.FaireBruit();
+    animal.Manger("sa nourriture");
+    Console.WriteLine();
+}
+                    </div>
+                </div>
+            </div>
+        </div>
+        
+        <!-- EXERCICE 6 -->
+        <div class="exercise">
+            <div class="exercise-number">Exercice 6</div>
+            <span class="difficulty difficile">Difficile</span>
+            <h3>Gestion d'Étudiants avec Calcul de Moyenne</h3>
+            
+            <div class="objectives">
+                <h4>🎯 Objectifs :</h4>
+                <ul>
+                    <li>Combiner plusieurs concepts (listes, conditions, boucles)</li>
+                    <li>Gérer des collections d'objets</li>
+                    <li>Effectuer des calculs complexes</li>
+                </ul>
+            </div>
+            
+            <p><strong>Énoncé :</strong></p>
+            <p>Créez une classe <code>Etudiant</code> avec :</p>
+            <ul>
+                <li>Propriétés : Nom, Matricule, Notes (List&lt;decimal&gt;)</li>
+                <li>Méthode <code>AjouterNote(decimal note)</code> (validation 0-20)</li>
+                <li>Méthode <code>CalculerMoyenne()</code> qui retourne la moyenne</li>
+                <li>Méthode <code>Reussi()</code> qui retourne true si moyenne >= 12</li>
+                <li>Méthode <code>Afficher()</code></li>
+            </ul>
+            
+            <p>Créez une classe <code>Classe</code> avec :</p>
+            <ul>
+                <li>Liste d'étudiants</li>
+                <li>Méthode <code>AjouterEtudiant(Etudiant e)</code></li>
+                <li>Méthode <code>MoyenneClasse()</code> - moyenne de toute la classe</li>
+                <li>Méthode <code>MeilleurEtudiant()</code> - retourne l'étudiant avec la meilleure moyenne</li>
+                <li>Méthode <code>NbReussis()</code> - nombre d'étudiants ayant réussi</li>
+                <li>Méthode <code>AfficherTous()</code></li>
+            </ul>
+            
+            <div class="hint">
+                <strong>💡 Indice :</strong> 
+                <ul>
+                    <li>Utilisez une boucle foreach pour calculer la moyenne globale</li>
+                    <li>Pour trouver le meilleur, parcourez la liste et gardez track du maximum</li>
+                    <li>Vérifiez que la liste n'est pas vide avant de calculer</li>
+                </ul>
+            </div>
+            
+            <div class="solution">
+                <div class="solution-title" onclick="toggleSolution(this)">✅ Voir la solution (complète)</div>
+                <div class="solution-content">
+                    <div class="code-block">public class Etudiant {
+    public string Nom { get; set; }
+    public string Matricule { get; set; }
+    private List<decimal> notes = new List<decimal>();
+    
+    public Etudiant(string nom, string matricule) {
+        Nom = nom;
+        Matricule = matricule;
+    }
+    
+    public void AjouterNote(decimal note) {
+        if (note >= 0 && note <= 20) {
+            notes.Add(note);
+            Console.WriteLine($"✅ Note {note} ajoutée à {Nom}");
+        } else {
+            Console.WriteLine("❌ La note doit être entre 0 et 20");
+        }
+    }
+    
+    public decimal CalculerMoyenne() {
+        if (notes.Count == 0) return 0;
+        
+        decimal somme = 0;
+        foreach (decimal note in notes) {
+            somme += note;
+        }
+        return somme / notes.Count;
+    }
+    
+    public bool Reussi() {
+        return CalculerMoyenne() >= 12;
+    }
+    
+    public void Afficher() {
+        decimal moyenne = CalculerMoyenne();
+        string statut = Reussi() ? "✅ Réussi" : "❌ Échoué";
+        Console.WriteLine($"{Nom} ({Matricule}) - Moyenne: {moyenne:F2} - {statut}");
+    }
+}
+
+public class Classe {
+    public string Nom { get; set; }
+    private List<Etudiant> etudiants = new List<Etudiant>();
+    
+    public Classe(string nom) {
+        Nom = nom;
+    }
+    
+    public void AjouterEtudiant(Etudiant e) {
+        etudiants.Add(e);
+    }
+    
+    public decimal MoyenneClasse() {
+        if (etudiants.Count == 0) return 0;
+        
+        decimal sommeMoyennes = 0;
+        foreach (Etudiant etudiant in etudiants) {
+            sommeMoyennes += etudiant.CalculerMoyenne();
+        }
+        return sommeMoyennes / etudiants.Count;
+    }
+    
+    public Etudiant MeilleurEtudiant() {
+        if (etudiants.Count == 0) return null;
+        
+        Etudiant meilleur = etudiants[0];
+        foreach (Etudiant etudiant in etudiants) {
+            if (etudiant.CalculerMoyenne() > meilleur.CalculerMoyenne()) {
+                meilleur = etudiant;
+            }
+        }
+        return meilleur;
+    }
+    
+    public int NbReussis() {
+        int compte = 0;
+        foreach (Etudiant etudiant in etudiants) {
+            if (etudiant.Reussi()) {
+                compte++;
+            }
+        }
+        return compte;
+    }
+    
+    public void AfficherTous() {
+        Console.WriteLine($"\n📚 Classe : {Nom}");
+        Console.WriteLine("=== Étudiants ===");
+        foreach (Etudiant etudiant in etudiants) {
+            etudiant.Afficher();
+        }
+        Console.WriteLine($"\nMoyenne de classe : {MoyenneClasse():F2}");
+        Console.WriteLine($"Réussis : {NbReussis()}/{etudiants.Count}");
+        Console.WriteLine($"Meilleur étudiant : {MeilleurEtudiant().Nom}");
+    }
+}
+
+// Utilisation
+Classe classe = new Classe("2e année");
+
+Etudiant e1 = new Etudiant("Alice", "001");
+e1.AjouterNote(18);
+e1.AjouterNote(16);
+e1.AjouterNote(19);
+
+Etudiant e2 = new Etudiant("Bob", "002");
+e2.AjouterNote(10);
+e2.AjouterNote(11);
+e2.AjouterNote(13);
+
+Etudiant e3 = new Etudiant("Charlie", "003");
+e3.AjouterNote(8);
+e3.AjouterNote(9);
+e3.AjouterNote(7);
+
+classe.AjouterEtudiant(e1);
+classe.AjouterEtudiant(e2);
+classe.AjouterEtudiant(e3);
+
+classe.AfficherTous();
+                    </div>
+                </div>
+            </div>
+        </div>
+        
+        <div class="note">
+            <strong>🎓 Conseils de progression :</strong>
+            <ul>
+                <li><strong>Exercices 1-2 :</strong> Commencez ici pour maîtriser les classes et l'encapsulation</li>
+                <li><strong>Exercice 3 :</strong> Challenge intéressant avec validation et calculs</li>
+                <li><strong>Exercices 4-5 :</strong> Approfondissez avec les collections et l'héritage</li>
+                <li><strong>Exercice 6 :</strong> Consolidez tous vos apprentissages</li>
+            </ul>
+        </div>
+        
+    </div>
+</body>
+</html>
